@@ -28,6 +28,13 @@ public class EmissionsCalculator {
             System.out.print("Enter your car type (petrol, diesel, electric, or hybrid): ");
             carType = scanner.nextLine();
         }
+        System.out.print("Is it a single or return travel? (Enter 'single' or 'return'): ");
+        String travelType = scanner.nextLine();
+
+        double distanceMultiplier = 1.0;
+        if ("return".equalsIgnoreCase(travelType)) {
+            distanceMultiplier = 2.0;
+        }
 
 
         String apiUrl = "https://beta4.api.climatiq.io/travel/distance";
@@ -73,8 +80,9 @@ public class EmissionsCalculator {
                 JsonNode responseJson = objectMapper.readTree(responseStream);
 
             // Extracting values from the JSON response
-            double co2e = responseJson.get("co2e").asDouble();
-            double distanceKm = responseJson.get("distance_km").asDouble();
+            double co2e = responseJson.get("co2e").asDouble() * distanceMultiplier;
+            double distanceKm = responseJson.get("distance_km").asDouble() * distanceMultiplier;
+           
             String originName = responseJson.get("origin").get("name").asText();
             String destinationName = responseJson.get("destination").get("name").asText();
 
