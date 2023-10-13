@@ -1,106 +1,196 @@
 package com.cbfacademy.apiassessment;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class EmissionsCalculator {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        boolean continueCalculations = true;
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        System.out.print("Enter your origin destination: ");
-        String origin = scanner.nextLine();
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (continueCalculations) {
+                int travelModeChoice = showTravelModeMenu(scanner);
+                String travelMode;
+                String carType = "";
+                
+                switch (travelModeChoice) {
+                    case 1:
+                        travelMode = "air";
+                        break;
+                    case 2:
+                        travelMode = "car";
+                        carType = showCarTypeMenu(scanner, travelMode);
+                        break;
+                    case 3:
+                        travelMode = "rail";
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        continue;
+                }
 
-        System.out.print("Enter the Fujitsu office address you are trying to get to: ");
-        String destination = scanner.nextLine();
-
-        System.out.print("Enter your travel mode (air, car, or rail): ");
-        String travelMode = scanner.nextLine();
-
-        String carType = "";
-        if ("car".equalsIgnoreCase(travelMode)) {
-            System.out.print("Enter your car type (petrol, diesel, electric, or hybrid): ");
-            carType = scanner.nextLine();
-        }
-        System.out.print("Is it a single or return travel? (Enter 'single' or 'return'): ");
-        String travelType = scanner.nextLine();
-
-        double distanceMultiplier = 1.0;
-        if ("return".equalsIgnoreCase(travelType)) {
-            distanceMultiplier = 2.0;
-        }
-
+        int journeyTypeChoice = showJourneyTypeMenu(scanner);
+         double distanceMultiplier = (journeyTypeChoice == 2) ? 2.0 : 1.0;
 
         String apiUrl = "https://beta4.api.climatiq.io/travel/distance";
-        String apiKey = ""; 
-
+        String apiKey = "";
         try {
-            // request parameters
-            String requestBody = "{"
-            + "\"travel_mode\": \"" + travelMode + "\","
-            + "\"origin\": {\"query\": \"" + origin + "\"},"
-            + "\"destination\": {\"query\": \"" + destination + "\"},"
-            + "\"car_details\": {\"car_type\": \"" + carType + "\"}"
-            + "}";
+            ObjectNode requestBodyNode = objectMapper.createObjectNode();
+            requestBodyNode.put("travel_mode", travelMode);
+            ObjectNode originNode = objectMapper.createObjectNode();
+            originNode.put("query", getOrigin(scanner));
+            ObjectNode destinationNode = objectMapper.createObjectNode();
+            destinationNode.put("query", getDestination(scanner));
+            requestBodyNode.set("origin", originNode);
+            requestBodyNode.set("destination", destinationNode);
 
-            // URL object
-            URL url = new URL(apiUrl);
+        if ("car".equalsIgnoreCase(travelMode)) {
+            ObjectNode carDetailsNode = objectMapper.createObjectNode();
+            carDetailsNode.put("car_type", carType);
+            requestBodyNode.set("car_details", carDetailsNode);
+                }
 
-            // Connection object
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+   
+        String requestBody = objectMapper.writeValueAsString(requestBodyNode);
 
-            // request method to POST
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+        URL url = new URL(apiUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            // input and output streams
-            connection.setDoOutput(true);
+         connection.setRequestMethod("POST");
+         connection.setRequestProperty("Content-Type", "application/json");
+         connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+         connection.setDoOutput(true);
 
-            // request body
-            try (OutputStream os = connection.getOutputStream()) {
+        try (OutputStream os = connection.getOutputStream()) {
                 byte[] requestBodyBytes = requestBody.getBytes("utf-8");
                 os.write(requestBodyBytes, 0, requestBodyBytes.length);
             }
-
-            // Get HTTP response code
             int responseCode = connection.getResponseCode();
 
-            // Parse JSON response
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                // Read and parse the API response
-                InputStream responseStream = connection.getInputStream();
-                ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode responseJson = objectMapper.readTree(responseStream);
-
-            // Extracting values from the JSON response
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            InputStream responseStream = connection.getInputStream();
+            JsonNode responseJson = objectMapper.readTree(responseStream);
             double co2e = responseJson.get("co2e").asDouble() * distanceMultiplier;
             double distanceKm = responseJson.get("distance_km").asDouble() * distanceMultiplier;
-           
             String originName = responseJson.get("origin").get("name").asText();
             String destinationName = responseJson.get("destination").get("name").asText();
-
-            // Printing extracted values
             System.out.println("CO2 Emissions: " + co2e + " kg");
             System.out.println("Distance: " + distanceKm + " km");
             System.out.println("Origin: " + originName);
             System.out.println("Destination: " + destinationName);
+         } else {
+            System.err.println("Request failed with response code: " + responseCode);
+            System.err.println("Error response:");
+            String errorResponse = getResponseString(connection.getErrorStream());
+            System.err.println(errorResponse);
+            }
+            connection.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        } 
-        connection.disconnect();
-    }catch (Exception e) {
-          
-            e.printStackTrace();
-        } finally {
-       
-            scanner.close();
+            System.out.print("Do you want to calculate another route? (y/n): ");
+            String userInput = scanner.nextLine().toLowerCase();
+            continueCalculations = userInput.equals("y") || userInput.equals("y");
+            }
+                } catch (Exception e) {
+                 e.printStackTrace();
+                }   
         }
-        
+
+    private static String getResponseString(InputStream responseStream) throws IOException {
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+        }
+        return response.toString();
+    }
+
+
+    private static String getOrigin(Scanner scanner) {
+        System.out.print("Enter your origin destination: ");
+        return scanner.nextLine();
+    }
+
+    private static String getDestination(Scanner scanner) {
+        System.out.print("Enter the Fujitsu office address you are trying to get to: ");
+        return scanner.nextLine();
+    }
+
+    private static int showTravelModeMenu(Scanner scanner) {
+        System.out.println("Select Travel Mode:");
+        System.out.println("1. Air");
+        System.out.println("2. Car");
+        System.out.println("3. Rail");
+        System.out.print("Choose a number: ");
+
+        int choice;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            choice = 0;
+        }
+        return choice;
+    }
+
+    private static String showCarTypeMenu(Scanner scanner, String travelMode) {
+        if ("car".equalsIgnoreCase(travelMode)) {
+        System.out.println("Select Car Type:");
+        System.out.println("1. Petrol");
+        System.out.println("2. Diesel");
+        System.out.println("3. Hybrid");
+        System.out.println("4. Plugin Hybrid");
+        System.out.println("5. Battery");
+        System.out.print("Choose a number: ");
+
+        int choice;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            choice = 0;
+        }
+
+        Map<Integer, String> carTypeMap = new HashMap<>();
+        carTypeMap.put(1, "petrol");
+        carTypeMap.put(2, "diesel");
+        carTypeMap.put(3, "hybrid");
+        carTypeMap.put(4, "plugin_hybrid");
+        carTypeMap.put(5, "battery");
+
+        return carTypeMap.getOrDefault(choice, "petrol"); 
+    } else {
+        return "petrol"; 
+    }
+    }
+
+    private static int showJourneyTypeMenu(Scanner scanner) {
+        System.out.println("Select Journey Type:");
+        System.out.println("1. Single");
+        System.out.println("2. Return");
+        System.out.print("Enter your choice: ");
+
+        int choice;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            choice = 0;
+        }
+        return choice;
     }
 }
