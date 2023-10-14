@@ -183,7 +183,7 @@ public class EmissionsCalculator {
         System.out.println("Select Journey Type:");
         System.out.println("1. Single");
         System.out.println("2. Return");
-        System.out.print("Enter your choice: ");
+        System.out.print("Choose a number: ");
 
         int choice;
         try {

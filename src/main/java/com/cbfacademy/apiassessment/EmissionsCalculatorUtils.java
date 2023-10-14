@@ -39,7 +39,7 @@ public class EmissionsCalculatorUtils {
    public static double calculateEmissions(String activityId, double distance, String distanceUnit) {
     activityId = activityId.toLowerCase();
     String apiUrl = "https://beta4.api.climatiq.io/estimate";
-    String apiKey = "FC2PSR1GFXM6PYKMGN1W70SQVSPZ";
+    String apiKey = "";
     double emissions = 0.0;
 
     try {

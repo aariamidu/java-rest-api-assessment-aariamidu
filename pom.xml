@@ -26,16 +26,8 @@
 <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
-        <version>2.13.0</version> <!-- Use the latest version -->
+        <version>2.15.0</version> 
     </dependency>
-    <!-- Jackson JSON Processor -->
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>2.12.4</version> <!-- Use the latest version -->
-    </dependency>
-
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -59,12 +51,7 @@
     <version>2.2</version>
 </dependency>
 
-   <dependency>
-     <groupId>com.fasterxml.jackson.core</groupId>
-     <artifactId>jackson-databind</artifactId>
-     <version>2.15.2</version>
-   </dependency>
- <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+  
 <dependency>
     <groupId>org.springframework.data</groupId>
     <artifactId>spring-data-jpa</artifactId>
@@ -83,17 +70,17 @@
     <artifactId>spring-web</artifactId>
     <version>6.0.12</version>
 </dependency>
-
-   <dependency>
-     <groupId>org.json</groupId>
-     <artifactId>json</artifactId>
-     <version>20230618</version>
-   </dependency>
  
    <dependency>
      <groupId>org.apache.tika</groupId>
      <artifactId>tika-core</artifactId>
-     <version>1.22</version>
+     <version>2.9.0</version>
+   </dependency>
+ 
+   <dependency>
+     <groupId>org.hswebframework.web</groupId>
+     <artifactId>hsweb-commons-service-api</artifactId>
+     <version>3.0.11</version>
    </dependency>
  </dependencies>
 
@@ -102,6 +89,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				 <configuration>
+                <mainClass>com.cbfacademy.apiassessment.EmissionsCalculator</mainClass> <!-- Specify your main class here -->
+            </configuration>
 			</plugin>
 		</plugins>
 	</build>
