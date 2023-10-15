@@ -2,18 +2,18 @@ package com.cbfacademy.apiassessment;
 
 public class Tree {
     private Long id;
-    private String type;
-    private double co2IntakeAfterOneYear;
-    private int co2IntakeOverLifetime;
+    private String species;
+    private double co2StoragePerTreePerYear;
+    private double co2AbsorptionPerTreeIn80Years;
     
     public Tree() {
     }
 
-    public Tree(long l, String type, double co2IntakeAfterOneYear, int co2IntakeOverLifetime) {
+    public Tree(long l, String species, double co2StoragePerTreePerYear, double co2AbsorptionPerTreeIn80Years) {
         this.id = l;
-        this.type = type;
-        this.co2IntakeAfterOneYear = co2IntakeAfterOneYear;
-        this.co2IntakeOverLifetime = co2IntakeOverLifetime;
+        this.species = species;
+        this.co2StoragePerTreePerYear = co2StoragePerTreePerYear;
+        this.co2AbsorptionPerTreeIn80Years = co2AbsorptionPerTreeIn80Years;
     }
 
 
@@ -25,27 +25,27 @@ public class Tree {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getSpecies() {
+        return species;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
-    public double getCo2IntakeAfterOneYear() {
-        return co2IntakeAfterOneYear;
+    public double getCo2StoragePerTreePerYear() {
+        return co2StoragePerTreePerYear;
     }
 
-    public void setCo2IntakeAfterOneYear(double co2IntakeAfterOneYear) {
-        this.co2IntakeAfterOneYear = co2IntakeAfterOneYear;
+    public void setCo2StoragePerTreePerYear(double co2StoragePerTreePerYear) {
+        this.co2StoragePerTreePerYear = co2StoragePerTreePerYear;
     }
 
-    public double getCo2IntakeOverLifetime() {
-        return co2IntakeOverLifetime;
+    public double getCo2AbsorptionPerTreeIn80Years() {
+        return co2AbsorptionPerTreeIn80Years;
     }
 
-    public void setCo2IntakeOverLifetime(int co2IntakeOverLifetime) {
-        this.co2IntakeOverLifetime = co2IntakeOverLifetime;
+    public void setCo2AbsorptionPerTreeIn80Years(int co2AbsorptionPerTreeIn80Years) {
+        this.co2AbsorptionPerTreeIn80Years = co2AbsorptionPerTreeIn80Years;
     }
 }

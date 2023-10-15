@@ -51,10 +51,13 @@ public class TreeService {
     }
     private List<Tree> getDefaultTrees() {
         return new ArrayList<>(Arrays.asList(
-            new Tree(1L, "Oak", 1099.4, 10994),
-            new Tree(2L, "Holly", 732.1, 7321),
-            new Tree(3L, "Pine", 493.0, 4930),
-            new Tree(4L, "Cypress", 487.2, 4872)
+            new Tree(1L, "Oak", 18.87, 1509.59),
+            new Tree(2L, "Beech", 15.89, 1270.87),
+            new Tree(3L, "Spruce", 20.13, 1610.10),
+            new Tree(4L, "Fir", 20.72, 1657.24),
+            new Tree(5L, "Douglas Fir", 46.46, 3717.04),
+            new Tree(6L, "Pine", 14.39, 1150.96),
+            new Tree(7L, "Larch", 35.91, 2872.63)
         ));
     }
     public Tree getTreeById(long id) {
