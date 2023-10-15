@@ -13,7 +13,6 @@ public class Tree {
     private double co2IntakeAfterOneYear;
     private int co2IntakeOverLifetime;
 
-    // Constructors
     public Tree(long l, String type, double co2IntakeAfterOneYear, int co2IntakeOverLifetime) {
         this.id = l;
         this.type = type;
@@ -21,7 +20,7 @@ public class Tree {
         this.co2IntakeOverLifetime = co2IntakeOverLifetime;
     }
 
-    // Getters and setters
+
     public Long getId() {
         return id;
     }
