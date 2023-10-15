@@ -15,6 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class EmissionsCalculator {
+    private static final String TREE_API_URL = "http://localhost:8080/api/trees/random"; // Tree API URL
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static void main(String[] args) {
         boolean continueCalculations = true;
@@ -101,6 +103,7 @@ public class EmissionsCalculator {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+             printRandomTreeFromAPI();
 
             System.out.print("Do you want to calculate another route? (y/n): ");
             String userInput = scanner.nextLine().toLowerCase();
@@ -110,7 +113,31 @@ public class EmissionsCalculator {
                  e.printStackTrace();
                 }   
         }
-
+        private static void printRandomTreeFromAPI() throws IOException {
+            // Fetch random tree data from the Tree API
+            URL treeApiUrl = new URL(TREE_API_URL);
+            HttpURLConnection treeConnection = (HttpURLConnection) treeApiUrl.openConnection();
+            treeConnection.setRequestMethod("GET");
+            int treeResponseCode = treeConnection.getResponseCode();
+    
+            if (treeResponseCode == HttpURLConnection.HTTP_OK) {
+                InputStream treeResponseStream = treeConnection.getInputStream();
+                JsonNode treeResponseJson = objectMapper.readTree(treeResponseStream);
+    
+                // Print tree information
+                String treeSpecies = treeResponseJson.get("species").asText();
+                double co2StoragePerYear = treeResponseJson.get("co2StoragePerTreePerYear").asDouble();
+                double co2AbsorptionIn80Years = treeResponseJson.get("co2AbsorptionPerTreeIn80Years").asDouble();
+    
+                System.out.println("Consider offsetting your CO2 emissions by planting a " + treeSpecies + " tree.");
+                System.out.println("It stores " + co2StoragePerYear + " kg CO2 per year, totaling " + co2AbsorptionIn80Years + " kg CO2 in 80 years!");
+                
+            } else {
+                System.err.println("Failed to fetch random tree data from the API. Response code: " + treeResponseCode);
+            }
+    
+            treeConnection.disconnect();
+        }
     private static String getResponseString(InputStream responseStream) throws IOException {
         StringBuilder response = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
