@@ -14,7 +14,7 @@ public class TreeController {
         this.treeService = treeService;
     }
 
-    @GetMapping
+    @GetMapping("/trees")
     public List<Tree> getAllTrees() {
         return treeService.getAllTrees();
     }
@@ -28,4 +28,9 @@ public class TreeController {
     public Tree addTree(@RequestBody Tree tree) {
         return treeService.addTree(tree);
     }
+    @DeleteMapping("/{id}")
+public void deleteTree(@PathVariable Long id) {
+    treeService.deleteTreeById(id);
+}
+
 }

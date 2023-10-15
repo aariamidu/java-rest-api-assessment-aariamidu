@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import java.util.Arrays;
 
@@ -72,5 +73,17 @@ public class TreeService {
         saveTreesToJsonFile();
         return tree;
     }
+    public void deleteTreeById(long id) {
+        Iterator<Tree> iterator = trees.iterator();
+        while (iterator.hasNext()) {
+            Tree tree = iterator.next();
+            if (tree.getId() == id) {
+                iterator.remove();
+                saveTreesToJsonFile();
+                return;
+            }
+        }
+    }
+    
 
 }
