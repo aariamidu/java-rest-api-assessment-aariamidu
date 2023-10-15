@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-
+import java.util.Random;
 import java.util.Arrays;
 
 
@@ -83,6 +83,11 @@ public class TreeService {
                 return;
             }
         }
+    }
+    public Tree getRandomTree() {
+        Random random = new Random();
+        int randomIndex = random.nextInt(trees.size());
+        return trees.get(randomIndex);
     }
     
 

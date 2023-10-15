@@ -32,5 +32,10 @@ public class TreeController {
 public void deleteTree(@PathVariable Long id) {
     treeService.deleteTreeById(id);
 }
-
+@GetMapping("/random")
+    public Tree getRandomTree() {
+        // Get a random tree from your tree service (implement logic to get a random tree)
+        Tree randomTree = treeService.getRandomTree();
+        return randomTree;
+    }
 }

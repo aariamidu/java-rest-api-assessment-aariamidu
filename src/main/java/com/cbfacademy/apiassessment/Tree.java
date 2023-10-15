@@ -5,6 +5,9 @@ public class Tree {
     private String type;
     private double co2IntakeAfterOneYear;
     private int co2IntakeOverLifetime;
+    
+    public Tree() {
+    }
 
     public Tree(long l, String type, double co2IntakeAfterOneYear, int co2IntakeOverLifetime) {
         this.id = l;
