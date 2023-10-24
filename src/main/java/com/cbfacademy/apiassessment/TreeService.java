@@ -1,40 +1,109 @@
 package com.cbfacademy.apiassessment;
+
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Arrays;
+import java.util.Collections;
+
 
 
 @Service
 public class TreeService {
     private final List<Tree> trees;
+    private static final String JSON_FILE_PATH = "src/main/resources/trees.json";
 
-    private static final String JSON_FILE_PATH = "trees.json";
-
+  
     public TreeService() {
-        trees = loadTreesFromJsonFile();
+        trees = Collections.synchronizedList(loadTreesFromJsonFile());
     }
 
-    private List<Tree> loadTreesFromJsonFile() {
+
+
+    private List<Tree> loadDefaultTreesFromJsonFile() {
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File(JSON_FILE_PATH);
 
-        if (file.exists()) {
-            try {
-                Tree[] treesArray = objectMapper.readValue(file, Tree[].class);
-                return new ArrayList<>(Arrays.asList(treesArray));
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            if (file.exists()) {
+                return Arrays.asList(objectMapper.readValue(file, Tree[].class));
+            } else {
+                file.createNewFile(); // Create an empty file if it doesn't exist
             }
+        } catch (IOException e) {
+    
+            e.printStackTrace();
         }
 
-        // Return default trees if the file doesn't exist or there's an error reading it
-        return getDefaultTrees();
+        return Collections.emptyList();
+    }
+
+    private synchronized List<Tree> loadTreesFromJsonFile() {
+        System.out.println("Loading trees from JSON file..."); // Add debug output
+        List<Tree> defaultTrees = loadDefaultTreesFromJsonFile();
+        if (!defaultTrees.isEmpty()) {
+            return defaultTrees;
+        }
+
+        // Provides an empty list if the JSON file is empty or not found
+        return new ArrayList<>();
+    }
+
+    
+    public List<Tree> getAllTrees() {
+        System.out.println("Getting all trees..."); // Add debug output
+        return trees;
+    }
+    
+    public Tree getTreeById(long id) {
+        // Search for the tree by its ID
+        for (Tree tree : trees) {
+            if (tree.getId() == id) {
+                System.out.println("Getting specific tree..."); 
+                return tree; // Returns the tree if found
+            }
+        }
+        return null; // Returns null if a tree with the given ID is not found
+    }
+
+    public synchronized Tree addTree(Tree tree) {
+        // adds a tree to Json
+        tree.setId(System.currentTimeMillis());
+        System.out.println("Entering addTree method...");
+        trees.add(tree);
+        saveTreesToJsonFile();
+        System.out.println("Exiting addTree method...");
+        return tree;
+    }
+    
+    public boolean deleteTreeById(long id) {
+        synchronized (trees) {
+            Iterator<Tree> iterator = trees.iterator();
+            while (iterator.hasNext()) {
+                Tree tree = iterator.next();
+                if (tree.getId() == id) {
+                    iterator.remove();  
+                    saveTreesToJsonFile();  
+                    return true;  
+                }
+            }
+        }
+        return false;  // Tree with given ID not found
+    }
+    
+    
+
+    
+    public Tree getRandomTree() {
+        //Calls random tree from Json
+        Random random = new Random();
+        int randomIndex = random.nextInt(trees.size());
+        return trees.get(randomIndex);
     }
 
     private void saveTreesToJsonFile() {
@@ -45,53 +114,5 @@ public class TreeService {
             e.printStackTrace();
         }
     }
-
-    public List<Tree> getAllTrees() {
-        return trees;
-    }
-    private List<Tree> getDefaultTrees() {
-        return new ArrayList<>(Arrays.asList(
-            new Tree(1L, "Oak", 18.87, 1509.59),
-            new Tree(2L, "Beech", 15.89, 1270.87),
-            new Tree(3L, "Spruce", 20.13, 1610.10),
-            new Tree(4L, "Fir", 20.72, 1657.24),
-            new Tree(5L, "Douglas Fir", 46.46, 3717.04),
-            new Tree(6L, "Pine", 14.39, 1150.96),
-            new Tree(7L, "Larch", 35.91, 2872.63)
-        ));
-    }
-    public Tree getTreeById(long id) {
-        // Search for the tree by its ID
-        for (Tree tree : trees) {
-            if (tree.getId() == id) {
-                return tree; // Return the tree if found
-            }
-        }
-        return null; // Return null if a tree with the given ID is not found
-    }
-
-    public Tree addTree(Tree tree) {
-        tree.setId(System.currentTimeMillis());
-        trees.add(tree);
-        saveTreesToJsonFile();
-        return tree;
-    }
-    public void deleteTreeById(long id) {
-        Iterator<Tree> iterator = trees.iterator();
-        while (iterator.hasNext()) {
-            Tree tree = iterator.next();
-            if (tree.getId() == id) {
-                iterator.remove();
-                saveTreesToJsonFile();
-                return;
-            }
-        }
-    }
-    public Tree getRandomTree() {
-        Random random = new Random();
-        int randomIndex = random.nextInt(trees.size());
-        return trees.get(randomIndex);
-    }
     
-
 }

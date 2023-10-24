@@ -9,13 +9,12 @@ public class Tree {
     public Tree() {
     }
 
-    public Tree(long l, String species, double co2StoragePerTreePerYear, double co2AbsorptionPerTreeIn80Years) {
-        this.id = l;
+    public Tree(Long id, String species, double co2StoragePerTreePerYear, double co2AbsorptionPerTreeIn80Years) {
+        this.id = id;
         this.species = species;
         this.co2StoragePerTreePerYear = co2StoragePerTreePerYear;
         this.co2AbsorptionPerTreeIn80Years = co2AbsorptionPerTreeIn80Years;
     }
-
 
     public Long getId() {
         return id;
@@ -45,7 +44,7 @@ public class Tree {
         return co2AbsorptionPerTreeIn80Years;
     }
 
-    public void setCo2AbsorptionPerTreeIn80Years(int co2AbsorptionPerTreeIn80Years) {
+    public void setCo2AbsorptionPerTreeIn80Years(double co2AbsorptionPerTreeIn80Years) {
         this.co2AbsorptionPerTreeIn80Years = co2AbsorptionPerTreeIn80Years;
     }
 }
