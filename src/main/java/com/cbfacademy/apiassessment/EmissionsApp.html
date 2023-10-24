@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emissions Calculator</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="form-group">
+            <label for="travelMode">Travel Mode:</label>
+            <input type="text" class="form-control" id="travelMode">
+        </div>
+
+        <div class="form-group">
+            <label for="carType">Car Type:</label>
+            <input type="text" class="form-control" id="carType">
+        </div>
+
+        <div class="form-group">
+            <label for="origin">Origin:</label>
+            <input type="text" class="form-control" id="origin">
+        </div>
+        
+<div class="form-group">
+    <label for="destination">Destination:</label>
+    <select class="form-control" id="destination"></select>
+</div>
+
+
+        <div class="form-group">
+            <label for="journeyType">Journey Type:</label>
+            <input type="number" class="form-control" id="journeyType">
+        </div>
+        <button class="btn btn-primary" onclick="calculateEmissions()">Calculate</button>
+
+    </div>
+
+    <div id="output" class="mt-4"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
