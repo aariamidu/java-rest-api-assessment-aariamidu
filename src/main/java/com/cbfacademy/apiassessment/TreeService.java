@@ -3,7 +3,6 @@ package com.cbfacademy.apiassessment;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class TreeService {
 
         try {
             if (file.exists()) {
-                return Arrays.asList(objectMapper.readValue(file, Tree[].class));
+                return new ArrayList<>( Arrays.asList(objectMapper.readValue(file, Tree[].class)));
             } else {
                 file.createNewFile(); // Create an empty file if it doesn't exist
             }
@@ -73,21 +72,29 @@ public class TreeService {
 
     public synchronized Tree addTree(Tree tree) {
         // adds a tree to Json
-        tree.setId(System.currentTimeMillis());
+        tree.setId(getNewId());
         System.out.println("Entering addTree method...");
         trees.add(tree);
         saveTreesToJsonFile();
         System.out.println("Exiting addTree method...");
         return tree;
     }
+    private  Long getNewId(){
+        Long highestId = 1L;
+        for( Tree tree : trees){
+            if (tree.getId() > highestId){
+                highestId = tree.getId() ;
+            }
+        }
+            return highestId + 1;
+    }
     
     public boolean deleteTreeById(long id) {
         synchronized (trees) {
-            Iterator<Tree> iterator = trees.iterator();
-            while (iterator.hasNext()) {
-                Tree tree = iterator.next();
+            for (Tree tree : trees) {
+             
                 if (tree.getId() == id) {
-                    iterator.remove();  
+                trees.remove(tree) ;
                     saveTreesToJsonFile();  
                     return true;  
                 }

@@ -1,51 +1,19 @@
 const outputDiv = document.getElementById('output');
-let addresses; 
+const destinationSelect = document.getElementById('destination');
 
 async function calculateEmissions() {
-    console.log('calculateEmissions function is called');
-
-    const travelMode = document.getElementById('travelMode').value;
-    const carType = document.getElementById('carType').value;
-    const origin = document.getElementById('origin').value;
-    const destinationSelect = document.getElementById('destination'); 
-    const journeyType = parseInt(document.getElementById('journeyType').value);
-
     try {
-     
-        const destinationsResponse = await fetch('/destination-addresses');
+        const destinationsResponse = await fetch('http://localhost:8080/api/destination-addresses');
         if (destinationsResponse.ok) {
-            addresses = await destinationsResponse.json();
-            if (!Array.isArray(addresses)) {
-                console.error('Invalid destination data:', addresses);
-                return; 
-            }
-            console.log('Destination Addresses:', addresses);
-
-            displayDestinationAddresses(addresses, destinationSelect);
-
-            const emissionsResponse = await fetch('/emissions/calculate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    travelMode: travelMode,
-                    carType: carType,
-                    origin: origin,
-                    destination: destinationSelect.value, 
-                    journeyType: journeyType
-                })
-            });
-
-            if (emissionsResponse.ok) {
-                const emissionsData = await emissionsResponse.json();
-                console.log('Emissions Data:', emissionsData); // Log the fetched emissions data
-                displayEmissionsResults(emissionsData);
+            const addresses = await destinationsResponse.json();
+            if (Array.isArray(addresses)) {
+                console.log('Destination Addresses:', addresses);
+                populateDropdown(addresses); // Call the function to populate the dropdown with the addresses
             } else {
-                outputDiv.innerHTML = '<p>Error calculating emissions. Please try again.</p>';
+                console.error('Invalid destination data:', addresses);
             }
         } else {
-            console.error('Error fetching destination addresses:', destinationsResponse.status);
+            console.error('Error loading destination data:', destinationsResponse.status);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -53,18 +21,20 @@ async function calculateEmissions() {
     }
 }
 
-function displayDestinationAddresses(destinations, destinationSelect) {
+function populateDropdown(addresses) {
+    // Clear the existing options in the dropdown
+    destinationSelect.innerHTML = '';
 
-    destinations.forEach(destination => {
+    addresses.forEach((address) => {
         const option = document.createElement('option');
-        option.value = destination.name;
-        option.textContent = destination.name; 
+        option.value = address.address; 
+        option.textContent = address.name; 
         destinationSelect.appendChild(option);
     });
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
- 
+
     calculateEmissions();
 });

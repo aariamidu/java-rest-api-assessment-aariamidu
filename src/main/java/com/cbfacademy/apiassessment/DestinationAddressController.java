@@ -16,12 +16,12 @@ public class DestinationAddressController {
         this.destinationAddressService = destinationAddressService;
     }
 
-    @GetMapping("/destination-addresses")
+    @GetMapping("/api/destination-addresses")
     public List<DestinationAddress> getDestinationAddresses() {
         return destinationAddressService.getDestinationAddresses();
     }
 
-    @PostMapping("/destination-addresses")
+    @PostMapping("/api/destination-addresses")
     public void saveDestinationAddresses(@RequestBody List<DestinationAddress> addresses) {
         destinationAddressService.saveDestinationAddresses(addresses);
     }
