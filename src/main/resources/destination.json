@@ -1,23 +1,22 @@
 [
-    {
-        "id": 1,
-        "name": "Fujitsu Office 1",
-        "address": "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU"
-    },
-    {
-        "id": 2,
-        "name": "Fujitsu Office 2",
-        "address": "7th Floor, The Lantern, 75 Hampstead Rd, London NW1 2PL"
-    },
-    {
-        "id": 3,
-        "name": "Fujitsu Office 3",
-        "address": "One Central Park, Northampton Rd, Manchester M40 5BP"
-    },
-    {
-        "id": 4,
-        "name": "Fujitsu Office 4",
-        "address": "Lovelace Road, Bracknell, RG12 8SN, United Kingdom"
-    }
-
+  {
+    "id": 1,
+    "name": "Fujitsu Office Birmingham",
+    "address": "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU"
+  },
+  {
+    "id": 2,
+    "name": "Fujitsu Office London",
+    "address": "7th Floor, The Lantern, 75 Hampstead Rd, London NW1 2PL"
+  },
+  {
+    "id": 3,
+    "name": "Fujitsu Office Manchester",
+    "address": "One Central Park, Northampton Rd, Manchester M40 5BP"
+  },
+  {
+    "id": 4,
+    "name": "Fujitsu Office Berkshire",
+    "address": "Lovelace Road, Bracknell, RG12 8SN, United Kingdom"
+  }
 ]

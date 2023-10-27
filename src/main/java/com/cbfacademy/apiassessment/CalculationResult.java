@@ -5,6 +5,8 @@ public class CalculationResult {
     private double distanceKm;
     private String origin;
     private String destination;
+    private String travelMode;
+    private String carType;
 
     // getters and setters
     public double getCo2Emissions() {
@@ -38,4 +40,21 @@ public class CalculationResult {
     public void setDestination(String destination) {
         this.destination = destination;
     }
+
+    public String getTravelMode() {
+        return travelMode;
+    }
+
+    public void setTravelMode(String travelMode) {
+        this.travelMode = travelMode;
+    }
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
+
 }

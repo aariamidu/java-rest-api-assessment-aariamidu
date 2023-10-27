@@ -5,7 +5,7 @@ public class EmissionRequest {
     private String carType;
     private String origin;
     private String destination;
-    private int journeyType;
+    private String journeyType;
 
     // getters and setters
     public String getTravelMode() {
@@ -40,13 +40,25 @@ public class EmissionRequest {
         this.destination = destination;
     }
 
-    public int getJourneyType() {
+    public String getJourneyType() {
         return journeyType;
     }
 
-    public void setJourneyType(int journeyType) {
+    public void setJourneyType(String journeyType) {
         this.journeyType = journeyType;
+
     }
+
+    public int getJourneyTypeAsInt() {
+        String lowerCaseJourneyType = journeyType.toLowerCase();
+        if ("one way".equals(lowerCaseJourneyType)) {
+            return 1;
+        } else if ("return".equals(lowerCaseJourneyType)) {
+            return 2;
+        } else {
+
+            return 1;
+        }
+    }
+
 }
-
-
