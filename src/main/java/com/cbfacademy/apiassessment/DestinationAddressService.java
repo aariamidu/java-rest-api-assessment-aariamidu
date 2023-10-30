@@ -16,12 +16,17 @@ public class DestinationAddressService {
 
     public List<DestinationAddress> getDestinationAddresses() {
         try {
-            DestinationAddress[] addressesArray = objectMapper.readValue(new File(DESTINATION_FILE_PATH), DestinationAddress[].class);
+            DestinationAddress[] addressesArray = objectMapper.readValue(new File(DESTINATION_FILE_PATH),
+                    DestinationAddress[].class);
             return new ArrayList<>(Arrays.asList(addressesArray));
         } catch (IOException e) {
-            e.printStackTrace(); 
-            return new ArrayList<>(); 
+            e.printStackTrace();
+            return new ArrayList<>();
         }
+    }
+    
+    public DestinationAddress getDestinationAddress(int id) {
+        List<DestinationAddress> addresses = getDestinationAddresses();
     }
 
     public void saveDestinationAddresses(List<DestinationAddress> addresses) {

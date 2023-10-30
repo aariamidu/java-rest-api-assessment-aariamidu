@@ -106,6 +106,38 @@ document.addEventListener("DOMContentLoaded", async function () {
         outputContainer.appendChild(emissionResultDiv);
 
         console.log("Output HTML set successfully:", outputContainer.innerHTML);
+
+        const emissionsData = {
+          co2e: co2e,
+          distance: distance,
+          origin: originName,
+          destination: destinationName,
+          treeSpecies: randomTreeSpecies,
+          co2StoragePerYear: randomTreeCO2Storage,
+          co2AbsorptionIn80Years: randomTreeCO2Absorption,
+        };
+
+        // Sending emissions data to the server
+        try {
+          const saveResponse = await fetch(
+            "http://localhost:8080/api/save-emissions",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(emissionsData)
+            }
+          );
+
+          if (saveResponse.ok) {
+            console.log("Emissions data saved successfully!");
+          } else {
+            console.error("Error saving emissions data:", saveResponse.status);
+          }
+        } catch (error) {
+          console.error("Error saving emissions data:", error);
+        }
       } else {
         outputContainer.innerHTML =
           "<p>An error occurred while calculating emissions.</p>";
@@ -117,37 +149,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         "<p>An error occurred. Please try again later.</p>";
     }
   }
-  const emissionsData = {
-    co2e: co2e,
-    distance: distance,
-    origin: originName,
-    destination: destinationName,
-    treeSpecies: randomTreeSpecies,
-    co2StoragePerYear: randomTreeCO2Storage,
-    co2AbsorptionIn80Years: randomTreeCO2Absorption,
-  };
 
-  // Sending emissions data to the server
-  try {
-    const saveResponse = await fetch(
-      "http://localhost:8080/api/save-emissions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(emissionsData),
-      }
-    );
-
-    if (saveResponse.ok) {
-      console.log("Emissions data saved successfully!");
-    } else {
-      console.error("Error saving emissions data:", saveResponse.status);
-    }
-  } catch (error) {
-    console.error("Error saving emissions data:", error);
-  }
   // Attaching the calculateEmissions function to the button click event
   if (calculateButton) {
     calculateButton.addEventListener("click", calculateEmissions);

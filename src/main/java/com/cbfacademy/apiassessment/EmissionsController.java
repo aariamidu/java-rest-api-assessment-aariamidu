@@ -20,8 +20,12 @@ public class EmissionsController {
 
     private static final String JSON_FILE_PATH = "src/main/resources/emissionsData.json";
 
-    @PostMapping("/api/save-emissions")
-    public ResponseEntity<String> saveEmissionsData(@RequestBody EmissionsData emissionsData) {
+    @PostMapping("/api/journeys")
+    public ResponseEntity<String> saveEmissionsData(@RequestBody JourneyRequest journeyRequest) {
+        EmissionsCalculatorService service = new EmissionsCalculatorService();
+        DestinationAddressService addressService = new DestinationAddressService();
+        String address = addressService.getDestinationAddress(journeyRequest.id).getAddress();
+        EmissionsData emissionsData = service.calculateEmissions(JSON_FILE_PATH, JSON_FILE_PATH, JSON_FILE_PATH, JSON_FILE_PATH, JSON_FILE_PATH);
         try {
 
             ObjectMapper objectMapper = new ObjectMapper();
