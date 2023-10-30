@@ -129,13 +129,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Sending emissions data to the server
   try {
-    const saveResponse = await fetch("/save-emissions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(emissionsData),
-    });
+    const saveResponse = await fetch(
+      "http://localhost:8080/api/save-emissions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emissionsData),
+      }
+    );
 
     if (saveResponse.ok) {
       console.log("Emissions data saved successfully!");
