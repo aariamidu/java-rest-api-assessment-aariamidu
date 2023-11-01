@@ -3,26 +3,18 @@ package com.cbfacademy.apiassessment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EmissionsData {
+public class EmissionsData extends JourneyRequest {
     private double co2e;
     private double distance;
-    private String origin;
-    private String destination;
     private String treeSpecies;
     private double co2StoragePerYear;
     private double co2AbsorptionIn80Years;
-    private String journeyType;
 
-    // Constructors
-    public EmissionsData() {
-    }
-
-    public EmissionsData(double co2e, double distance, String origin, String destination,
-            String treeSpecies, double co2StoragePerYear, double co2AbsorptionIn80Years) {
+    public EmissionsData(double co2e, double distance, String treeSpecies, double co2StoragePerYear,
+            double co2AbsorptionIn80Years, String origin, int destinationId, String journeyType) {
+        super(origin, destinationId, journeyType);
         this.co2e = co2e;
         this.distance = distance;
-        this.origin = origin;
-        this.destination = destination;
         this.treeSpecies = treeSpecies;
         this.co2StoragePerYear = co2StoragePerYear;
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
@@ -35,14 +27,6 @@ public class EmissionsData {
 
     public double getDistance() {
         return distance;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public String getDestination() {
-        return destination;
     }
 
     public String getTreeSpecies() {
@@ -66,14 +50,6 @@ public class EmissionsData {
         this.distance = distance;
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
     public void setTreeSpecies(String treeSpecies) {
         this.treeSpecies = treeSpecies;
     }
@@ -86,29 +62,6 @@ public class EmissionsData {
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
     }
 
-    public String getJourneyType() {
-        return journeyType;
-    }
-
-    public void setJourneyType(String journeyType) {
-        this.journeyType = journeyType;
-
-    }
-
-    public int getJourneyTypeAsInt() {
-        if (journeyType == null) {
-            return 1; // Assuming default is 'one way'
-        }
-        String lowerCaseJourneyType = journeyType.toLowerCase();
-        if ("one way".equals(lowerCaseJourneyType)) {
-            return 1;
-        } else if ("return".equals(lowerCaseJourneyType)) {
-            return 2;
-        } else {
-            return 1; // Handle other cases or set a default value
-        }
-    }
-
     public String toJsonString() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -119,13 +72,12 @@ public class EmissionsData {
         }
     }
 
-    @Override
     public String toString() {
         return "EmissionsData{" +
                 "co2e=" + co2e +
                 ", distance=" + distance +
                 ", origin='" + origin + '\'' +
-                ", destination='" + destination + '\'' +
+                ", destinationId='" + destinationId + '\'' +
                 ", treeSpecies='" + treeSpecies + '\'' +
                 ", co2StoragePerYear=" + co2StoragePerYear +
                 ", co2AbsorptionIn80Years=" + co2AbsorptionIn80Years +

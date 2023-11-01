@@ -7,13 +7,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const outputContainer = document.getElementById("outputContainer");
 
   let emissionResultDiv;
-  let co2e;
-  let distance;
-  let originName;
-  let destinationName;
-  let randomTreeSpecies;
-  let randomTreeCO2Storage;
-  let randomTreeCO2Absorption;
 
   async function populateDropdown(addresses) {
     destinationSelect.innerHTML = "";
@@ -41,103 +34,40 @@ document.addEventListener("DOMContentLoaded", async function () {
     const isReturnJourney = returnJourneyCheckbox.checked;
 
     try {
-      // Fetching emissions data from third-party API
-      const thirdPartyApiUrl = "https://beta4.api.climatiq.io/travel/distance";
-      const apiKey = "FC2PSR1GFXM6PYKMGN1W70SQVSPZ";
-
-      const thirdPartyResponse = await fetch(thirdPartyApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          travel_mode: travelMode,
-          origin: { query: origin },
-          destination: { query: destination },
-        }),
-      });
-
-      if (thirdPartyResponse.ok) {
-        const thirdPartyData = await thirdPartyResponse.json();
-
-        let co2e = thirdPartyData.co2e;
-        let distance = thirdPartyData.distance_km;
-        const originName = thirdPartyData.origin.name;
-        const destinationName = thirdPartyData.destination.name;
-
-        if (isReturnJourney) {
-          co2e *= 2;
-          distance *= 2;
+      // Fetch emissions data from your API endpoint
+      const emissionsResponse = await fetch(
+        "http://localhost:8080/api/journeys",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            origin: origin,
+            destination: destination,
+            travelMode: travelMode,
+            journeyType: isReturnJourney ? "return" : "one way",
+          }),
         }
+      );
+
+      if (emissionsResponse.ok) {
+        const emissionsData = await emissionsResponse.json();
+
         emissionResultDiv = document.createElement("div");
         emissionResultDiv.innerHTML = `<p><strong>CO2 Emissions:</strong> ${co2e} kg</p>`;
         emissionResultDiv.innerHTML += `<p><strong>Distance:</strong> ${distance} km</p>`;
         emissionResultDiv.innerHTML += `<p><strong>Origin:</strong> ${originName}</p>`;
         emissionResultDiv.innerHTML += `<p><strong>Destination:</strong> ${destinationName}</p>`;
-
-        // Fetching random tree data from your API
-        const randomTreeResponse = await fetch(
-          "http://localhost:8080/api/trees/random"
-        );
-
-        if (randomTreeResponse.ok) {
-          const randomTreeData = await randomTreeResponse.json();
-          const randomTreeSpecies = randomTreeData.species;
-          const randomTreeCO2Storage = randomTreeData.co2StoragePerTreePerYear;
-          const randomTreeCO2Absorption =
-            randomTreeData.co2AbsorptionPerTreeIn80Years;
-
-          // Displaying random tree data
-          emissionResultDiv.innerHTML += `<p><strong>Tree Species:</strong> ${randomTreeSpecies}</p>`;
-          emissionResultDiv.innerHTML += `<p><strong>CO2 Storage per Tree per Year:</strong> ${randomTreeCO2Storage} kg</p>`;
-          emissionResultDiv.innerHTML += `<p><strong>CO2 Absorption per Tree in 80 Years:</strong> ${randomTreeCO2Absorption} kg</p>`;
-        } else {
-          console.error(
-            "Error fetching random tree data:",
-            randomTreeResponse.status
-          );
-
-          emissionResultDiv.innerHTML +=
-            "<p>Error fetching random tree data. Please try again later.</p>";
-        }
+        // Displaying random tree data
+        emissionResultDiv.innerHTML += `<p><strong>Tree Species:</strong> ${emissionsData.treeSpecies}</p>`;
+        emissionResultDiv.innerHTML += `<p><strong>CO2 Storage per Tree per Year:</strong> ${emissionsData.co2StoragePerYear} kg</p>`;
+        emissionResultDiv.innerHTML += `<p><strong>CO2 Absorption per Tree in 80 Years:</strong> ${emissionsData.co2AbsorptionIn80Years} kg</p>`;
 
         outputContainer.innerHTML = "";
         outputContainer.appendChild(emissionResultDiv);
 
-        console.log("Output HTML set successfully:", outputContainer.innerHTML);
-
-        const emissionsData = {
-          co2e: co2e,
-          distance: distance,
-          origin: originName,
-          destination: destinationName,
-          treeSpecies: randomTreeSpecies,
-          co2StoragePerYear: randomTreeCO2Storage,
-          co2AbsorptionIn80Years: randomTreeCO2Absorption,
-        };
-
-        // Sending emissions data to the server
-        try {
-          const saveResponse = await fetch(
-            "http://localhost:8080/api/save-emissions",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(emissionsData)
-            }
-          );
-
-          if (saveResponse.ok) {
-            console.log("Emissions data saved successfully!");
-          } else {
-            console.error("Error saving emissions data:", saveResponse.status);
-          }
-        } catch (error) {
-          console.error("Error saving emissions data:", error);
-        }
+        console.log("Emissions data received successfully!");
       } else {
         outputContainer.innerHTML =
           "<p>An error occurred while calculating emissions.</p>";

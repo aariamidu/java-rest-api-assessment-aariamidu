@@ -24,16 +24,22 @@ public class DestinationAddressService {
             return new ArrayList<>();
         }
     }
-    
-    public DestinationAddress getDestinationAddress(int id) {
+
+    public DestinationAddress getDestinationAddress(int destinationId) {
         List<DestinationAddress> addresses = getDestinationAddresses();
+        for (DestinationAddress address : addresses) {
+            if (address.getId() == destinationId) {
+                return address;
+            }
+        }
+        return null; // Address with the given ID not found
     }
 
     public void saveDestinationAddresses(List<DestinationAddress> addresses) {
         try {
             objectMapper.writeValue(new File(DESTINATION_FILE_PATH), addresses);
         } catch (IOException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
     }
 }
