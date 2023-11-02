@@ -38,7 +38,7 @@ public class EmissionsCalculatorService {
         if (destinationAddress == null) {
             logger.error("Destination address not found for ID: {}", destinationId);
             // Log the error for further analysis, and return a default or empty response
-            return new EmissionsData(0.0, 0.0, "Unknown", 0.0, 0.0, origin, destinationId, journeyType);
+            return new EmissionsData(0.0, 0.0, "Unknown", 0.0, 0.0, origin, "Unknown", journeyType);
         }
         try {
             URL url = new URL(API_URL);
@@ -48,7 +48,8 @@ public class EmissionsCalculatorService {
             connection.setRequestProperty("Authorization", "Bearer " + API_KEY);
             connection.setDoOutput(true);
 
-            String requestBody = createRequestBody(travelMode, carType, origin, destinationId, journeyType);
+            String destination = destinationAddress.getAddress();
+            String requestBody = createRequestBody(travelMode, carType, origin, destination, journeyType);
 
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] requestBodyBytes = requestBody.getBytes("utf-8");
@@ -74,7 +75,7 @@ public class EmissionsCalculatorService {
                 double co2AbsorptionIn80Years = randomTree != null ? randomTree.getCo2AbsorptionPerTreeIn80Years() : 0;
 
                 EmissionsData emissionsData = new EmissionsData(co2e, distanceKm, treeSpecies, co2StoragePerYear,
-                        co2AbsorptionIn80Years, origin, destinationId, journeyType);
+                        co2AbsorptionIn80Years, origin, destination, journeyType);
 
                 return emissionsData;
             }
@@ -85,9 +86,9 @@ public class EmissionsCalculatorService {
         return null;
     }
 
-    private String createRequestBody(String travelMode, String carType, String origin, int destinationId,
+    private String createRequestBody(String travelMode, String carType, String origin, String destination,
             String journeyType) {
-        String destination = String.valueOf(destinationId);
+
         ObjectNode requestBodyNode = JsonNodeFactory.instance.objectNode();
         requestBodyNode.put("travel_mode", travelMode);
 

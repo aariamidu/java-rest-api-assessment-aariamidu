@@ -3,24 +3,30 @@ package com.cbfacademy.apiassessment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EmissionsData extends JourneyRequest {
+public class EmissionsData extends AbstractJourney {
     private double co2e;
     private double distance;
     private String treeSpecies;
     private double co2StoragePerYear;
     private double co2AbsorptionIn80Years;
+    private String destination;
 
     public EmissionsData(double co2e, double distance, String treeSpecies, double co2StoragePerYear,
-            double co2AbsorptionIn80Years, String origin, int destinationId, String journeyType) {
-        super(origin, destinationId, journeyType);
+            double co2AbsorptionIn80Years, String origin, String destination, String journeyType) {
+        super(origin, journeyType);
         this.co2e = co2e;
         this.distance = distance;
         this.treeSpecies = treeSpecies;
         this.co2StoragePerYear = co2StoragePerYear;
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
+        this.destination = destination;
     }
 
     // Getters
+    public String getDestination() {
+        return destination;
+    }
+
     public double getCo2e() {
         return co2e;
     }
@@ -42,6 +48,10 @@ public class EmissionsData extends JourneyRequest {
     }
 
     // Setters
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
     public void setCo2e(double co2e) {
         this.co2e = co2e;
     }
@@ -77,7 +87,7 @@ public class EmissionsData extends JourneyRequest {
                 "co2e=" + co2e +
                 ", distance=" + distance +
                 ", origin='" + origin + '\'' +
-                ", destinationId='" + destinationId + '\'' +
+                ", destination='" + destination + '\'' +
                 ", treeSpecies='" + treeSpecies + '\'' +
                 ", co2StoragePerYear=" + co2StoragePerYear +
                 ", co2AbsorptionIn80Years=" + co2AbsorptionIn80Years +
