@@ -1,1 +1,19 @@
-{"co2e":1191.0,"distance":5562.0,"origin":"New York, NY, United States","destination":"The Lantern","treeSpecies":null,"co2StoragePerYear":0.0,"co2AbsorptionIn80Years":0.0,"journeyType":null,"journeyTypeAsInt":1}
+[ {
+  "co2e" : 5.188,
+  "distance" : 24.78,
+  "treeSpecies" : "Oak",
+  "co2StoragePerYear" : 18.87,
+  "co2AbsorptionIn80Years" : 1509.59,
+  "origin" : "E17 5PJ",
+  "destination" : "7th Floor, The Lantern, 75 Hampstead Rd, London NW1 2PL",
+  "journeyType" : "return"
+}, {
+  "co2e" : 2.594,
+  "distance" : 12.39,
+  "treeSpecies" : "Fir",
+  "co2StoragePerYear" : 20.72,
+  "co2AbsorptionIn80Years" : 1657.24,
+  "origin" : "E17 5PJ",
+  "destination" : "7th Floor, The Lantern, 75 Hampstead Rd, London NW1 2PL",
+  "journeyType" : "one way"
+} ]

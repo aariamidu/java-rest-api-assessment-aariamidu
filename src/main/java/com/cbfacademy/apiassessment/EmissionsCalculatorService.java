@@ -88,7 +88,7 @@ public class EmissionsCalculatorService {
 
     private String createRequestBody(String travelMode, String carType, String origin, String destination,
             String journeyType) {
-
+                
         ObjectNode requestBodyNode = JsonNodeFactory.instance.objectNode();
         requestBodyNode.put("travel_mode", travelMode);
 

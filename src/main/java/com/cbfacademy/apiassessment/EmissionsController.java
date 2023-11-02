@@ -1,14 +1,17 @@
 package com.cbfacademy.apiassessment;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.util.List;
-import java.io.FileWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +31,9 @@ public class EmissionsController {
 
     @PostMapping("/api/journeys")
     public ResponseEntity<String> saveEmissionsData(@RequestBody JourneyRequest journeyRequest) {
-        int destinationId = journeyRequest.getDestinationId(); // Retrieving the destination ID from the JourneyRequest
+        int destinationId = journeyRequest.getDestinationId();
         logger.info("Received destinationId: {}", destinationId);
-        List<DestinationAddress> destinations = destinationAddressService.getDestinationAddresses();
-        logger.info("Available destinations: {}", destinations);
 
-        // Fetching the destination address using the destination ID
         DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
 
         if (destinationAddress == null) {
@@ -49,19 +49,36 @@ public class EmissionsController {
         EmissionsData emissionsData = emissionsCalculatorService.calculateEmissions(travelMode, carType, origin,
                 destinationId, journeyType);
 
-        try {
+        List<EmissionsData> existingEmissionsData = readEmissionsDataFromFile();
+        existingEmissionsData.add(emissionsData);
+
+        try (FileWriter fileWriter = new FileWriter(JSON_FILE_PATH)) {
             ObjectMapper objectMapper = new ObjectMapper();
-            String jsonData = objectMapper.writeValueAsString(emissionsData);
-
-            FileWriter fileWriter = new FileWriter(JSON_FILE_PATH);
-            fileWriter.write(jsonData);
-            fileWriter.close();
-
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(fileWriter, existingEmissionsData);
             return ResponseEntity.ok("Emissions data saved successfully!");
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error saving emissions data: " + e.getMessage());
+        }
+    }
+
+    private List<EmissionsData> readEmissionsDataFromFile() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(JSON_FILE_PATH);
+
+            if (!file.exists()) {
+                // Return a new empty list if the file does not exist
+                return new ArrayList<>();
+            }
+
+            return objectMapper.readValue(file, new TypeReference<List<EmissionsData>>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the exception as needed, e.g., log the error and return an empty list
+            return new ArrayList<>();
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.cbfacademy.apiassessment;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,9 +13,18 @@ public class EmissionsData extends AbstractJourney {
     private double co2StoragePerYear;
     private double co2AbsorptionIn80Years;
     private String destination;
+    @JsonIgnore
+    private int journeyTypeAsInt;
 
-    public EmissionsData(double co2e, double distance, String treeSpecies, double co2StoragePerYear,
-            double co2AbsorptionIn80Years, String origin, String destination, String journeyType) {
+    @JsonCreator
+    public EmissionsData(@JsonProperty("co2e") double co2e,
+            @JsonProperty("distance") double distance,
+            @JsonProperty("treeSpecies") String treeSpecies,
+            @JsonProperty("co2StoragePerYear") double co2StoragePerYear,
+            @JsonProperty("co2AbsorptionIn80Years") double co2AbsorptionIn80Years,
+            @JsonProperty("origin") String origin,
+            @JsonProperty("destination") String destination,
+            @JsonProperty("journeyType") String journeyType) {
         super(origin, journeyType);
         this.co2e = co2e;
         this.distance = distance;
