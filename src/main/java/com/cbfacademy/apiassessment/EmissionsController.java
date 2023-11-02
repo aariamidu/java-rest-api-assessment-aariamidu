@@ -40,13 +40,13 @@ public class EmissionsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Destination address not found for the provided ID");
         }
-
+        int id = 0;
         String travelMode = "car";
         String carType = "petrol";
         String origin = journeyRequest.getOrigin();
         String journeyType = journeyRequest.getJourneyType();
 
-        EmissionsData emissionsData = emissionsCalculatorService.calculateEmissions(travelMode, carType, origin,
+        EmissionsData emissionsData = emissionsCalculatorService.calculateEmissions(id, travelMode, carType, origin,
                 destinationId, journeyType);
 
         List<EmissionsData> existingEmissionsData = readEmissionsDataFromFile();

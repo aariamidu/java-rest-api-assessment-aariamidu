@@ -31,14 +31,14 @@ public class EmissionsCalculatorService {
         this.treeService = treeService;
     }
 
-    public EmissionsData calculateEmissions(String travelMode, String carType, String origin, int destinationId,
+    public EmissionsData calculateEmissions(int id, String travelMode, String carType, String origin, int destinationId,
             String journeyType) {
         DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
 
         if (destinationAddress == null) {
             logger.error("Destination address not found for ID: {}", destinationId);
             // Log the error for further analysis, and return a default or empty response
-            return new EmissionsData(0.0, 0.0, "Unknown", 0.0, 0.0, origin, "Unknown", journeyType);
+            return new EmissionsData(0, 0.0, 0.0, "Unknown", 0.0, 0.0, origin, "Unknown", journeyType);
         }
         try {
             URL url = new URL(API_URL);
@@ -73,10 +73,8 @@ public class EmissionsCalculatorService {
                 String treeSpecies = randomTree != null ? randomTree.getSpecies() : "Unknown";
                 double co2StoragePerYear = randomTree != null ? randomTree.getCo2StoragePerTreePerYear() : 0;
                 double co2AbsorptionIn80Years = randomTree != null ? randomTree.getCo2AbsorptionPerTreeIn80Years() : 0;
-
-                EmissionsData emissionsData = new EmissionsData(co2e, distanceKm, treeSpecies, co2StoragePerYear,
+                EmissionsData emissionsData = new EmissionsData(0, co2e, distanceKm, treeSpecies, co2StoragePerYear,
                         co2AbsorptionIn80Years, origin, destination, journeyType);
-
                 return emissionsData;
             }
         } catch (IOException e) {
@@ -88,7 +86,7 @@ public class EmissionsCalculatorService {
 
     private String createRequestBody(String travelMode, String carType, String origin, String destination,
             String journeyType) {
-                
+
         ObjectNode requestBodyNode = JsonNodeFactory.instance.objectNode();
         requestBodyNode.put("travel_mode", travelMode);
 

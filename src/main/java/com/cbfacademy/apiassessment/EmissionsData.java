@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EmissionsData extends AbstractJourney {
+    private static long idCounter = 1; // Add a static ID counter
+    private long id;
     private double co2e;
     private double distance;
     private String treeSpecies;
@@ -17,7 +19,7 @@ public class EmissionsData extends AbstractJourney {
     private int journeyTypeAsInt;
 
     @JsonCreator
-    public EmissionsData(@JsonProperty("co2e") double co2e,
+    public EmissionsData(@JsonProperty("id") long id, @JsonProperty("co2e") double co2e,
             @JsonProperty("distance") double distance,
             @JsonProperty("treeSpecies") String treeSpecies,
             @JsonProperty("co2StoragePerYear") double co2StoragePerYear,
@@ -26,6 +28,7 @@ public class EmissionsData extends AbstractJourney {
             @JsonProperty("destination") String destination,
             @JsonProperty("journeyType") String journeyType) {
         super(origin, journeyType);
+        this.id = id == 0 ? idCounter++ : id;
         this.co2e = co2e;
         this.distance = distance;
         this.treeSpecies = treeSpecies;
@@ -35,6 +38,10 @@ public class EmissionsData extends AbstractJourney {
     }
 
     // Getters
+    public long getId() {
+        return id;
+    }
+
     public String getDestination() {
         return destination;
     }
@@ -60,6 +67,10 @@ public class EmissionsData extends AbstractJourney {
     }
 
     // Setters
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setDestination(String destination) {
         this.destination = destination;
     }
@@ -96,6 +107,7 @@ public class EmissionsData extends AbstractJourney {
 
     public String toString() {
         return "EmissionsData{" +
+                "id=" + id +
                 "co2e=" + co2e +
                 ", distance=" + distance +
                 ", origin='" + origin + '\'' +

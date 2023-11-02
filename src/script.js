@@ -8,21 +8,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let emissionResultDiv;
 
-  async function populateDropdown(addresses) {
-    destinationSelect.innerHTML = "";
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "Select a destination";
-    destinationSelect.appendChild(defaultOption);
-
-    addresses.forEach((address) => {
-      const option = document.createElement("option");
-      option.value = address.address;
-      option.textContent = address.name;
-      destinationSelect.appendChild(option);
-    });
-  }
-
   async function calculateEmissions(event) {
     event.preventDefault();
     console.log("Calculate button clicked!");
@@ -46,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             origin: origin,
             destination: destination,
             travelMode: travelMode,
+            carType: carType, // Add carType to the request body
             journeyType: isReturnJourney ? "return" : "one way",
           }),
         }
@@ -55,10 +41,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         const emissionsData = await emissionsResponse.json();
 
         emissionResultDiv = document.createElement("div");
-        emissionResultDiv.innerHTML = `<p><strong>CO2 Emissions:</strong> ${co2e} kg</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>Distance:</strong> ${distance} km</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>Origin:</strong> ${originName}</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>Destination:</strong> ${destinationName}</p>`;
+        emissionResultDiv.innerHTML = `<p><strong>CO2 Emissions:</strong> ${emissionsData.co2e} kg</p>`;
+        emissionResultDiv.innerHTML += `<p><strong>Distance:</strong> ${emissionsData.distance} km</p>`;
+        emissionResultDiv.innerHTML += `<p><strong>Origin:</strong> ${emissionsData.origin}</p>`;
+        emissionResultDiv.innerHTML += `<p><strong>Destination:</strong> ${emissionsData.destination}</p>`;
         // Displaying random tree data
         emissionResultDiv.innerHTML += `<p><strong>Tree Species:</strong> ${emissionsData.treeSpecies}</p>`;
         emissionResultDiv.innerHTML += `<p><strong>CO2 Storage per Tree per Year:</strong> ${emissionsData.co2StoragePerYear} kg</p>`;
@@ -98,7 +84,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         const addresses = await destinationsResponse.json();
         console.log("Destination Addresses:", addresses);
         if (Array.isArray(addresses)) {
-          populateDropdown(addresses);
+          addresses.forEach((address) => {
+            const option = document.createElement("option");
+            option.value = address.address;
+            option.textContent = address.name;
+            destinationSelect.appendChild(option);
+          });
         } else {
           console.error("Invalid destination data:", addresses);
         }
