@@ -26,7 +26,7 @@ public class QuickSort {
         double pivot = emissionsDataList.get(high).getCo2e();
         int i = low - 1;
         for (int j = low; j < high; j++) {
-            if (emissionsDataList.get(j).getCo2e() <= pivot) {
+            if (emissionsDataList.get(j).getCo2e() < pivot) {
                 i++;
                 swap(emissionsDataList, i, j);
             }

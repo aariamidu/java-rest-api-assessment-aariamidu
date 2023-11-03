@@ -1,1 +1,61 @@
-{"co2e":37.2,"distance":176.9,"origin":"London, England, United Kingdom","destination":"Solihull Parkway, Birmingham, B37 7, United Kingdom","treeSpecies":null,"co2StoragePerYear":0.0,"co2AbsorptionIn80Years":0.0,"journeyType":null,"journeyTypeAsInt":1}
+[ {
+  "id" : 5,
+  "co2e" : 13.82,
+  "distance" : 311.1,
+  "treeSpecies" : "Holly",
+  "co2StoragePerYear" : 16.87,
+  "co2AbsorptionIn80Years" : 1309.59,
+  "origin" : "stratford, london",
+  "destination" : "One Central Park, Northampton Rd, Manchester M40 5BP",
+  "journeyType" : "single",
+  "travelMode" : "rail",
+  "carType" : null
+}, {
+  "id" : 4,
+  "co2e" : 27.64,
+  "distance" : 622.2,
+  "treeSpecies" : "Spruce",
+  "co2StoragePerYear" : 20.13,
+  "co2AbsorptionIn80Years" : 1610.1,
+  "origin" : "stratford, london",
+  "destination" : "One Central Park, Northampton Rd, Manchester M40 5BP",
+  "journeyType" : "return",
+  "travelMode" : "rail",
+  "carType" : null
+}, {
+  "id" : 1,
+  "co2e" : 29.99,
+  "distance" : 675.0,
+  "treeSpecies" : "Pine",
+  "co2StoragePerYear" : 14.39,
+  "co2AbsorptionIn80Years" : 1150.96,
+  "origin" : "N17 4NA",
+  "destination" : "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU",
+  "journeyType" : "single",
+  "travelMode" : "rail",
+  "carType" : null
+}, {
+  "id" : 2,
+  "co2e" : 106.0,
+  "distance" : 506.2,
+  "treeSpecies" : "Maple",
+  "co2StoragePerYear" : 22.1,
+  "co2AbsorptionIn80Years" : 1768.18,
+  "origin" : "N17 4NA",
+  "destination" : "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU",
+  "journeyType" : "single",
+  "travelMode" : "car",
+  "carType" : "petrol"
+}, {
+  "id" : 3,
+  "co2e" : 212.0,
+  "distance" : 1012.4,
+  "treeSpecies" : "Maple",
+  "co2StoragePerYear" : 22.1,
+  "co2AbsorptionIn80Years" : 1768.18,
+  "origin" : "N17 4NA",
+  "destination" : "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU",
+  "journeyType" : "return",
+  "travelMode" : "car",
+  "carType" : "petrol"
+} ]

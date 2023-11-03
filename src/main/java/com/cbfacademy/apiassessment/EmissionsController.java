@@ -51,6 +51,8 @@ public class EmissionsController {
 
         List<EmissionsData> existingEmissionsData = readEmissionsDataFromFile();
         existingEmissionsData.add(emissionsData);
+        QuickSort quickSort = new QuickSort();
+        quickSort.sort(existingEmissionsData);
 
         try (FileWriter fileWriter = new FileWriter(JSON_FILE_PATH)) {
             ObjectMapper objectMapper = new ObjectMapper();
