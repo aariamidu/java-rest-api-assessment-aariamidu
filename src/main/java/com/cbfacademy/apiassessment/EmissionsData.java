@@ -1,3 +1,4 @@
+
 package com.cbfacademy.apiassessment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EmissionsData extends AbstractJourney {
-    private static long idCounter = 1; // Add a static ID counter
+    private static long idCounter = 1;
     private long id;
     private double co2e;
     private double distance;
@@ -15,6 +16,7 @@ public class EmissionsData extends AbstractJourney {
     private double co2StoragePerYear;
     private double co2AbsorptionIn80Years;
     private String destination;
+
     @JsonIgnore
     private int journeyTypeAsInt;
 
@@ -26,8 +28,9 @@ public class EmissionsData extends AbstractJourney {
             @JsonProperty("co2AbsorptionIn80Years") double co2AbsorptionIn80Years,
             @JsonProperty("origin") String origin,
             @JsonProperty("destination") String destination,
-            @JsonProperty("journeyType") String journeyType) {
-        super(origin, journeyType);
+            @JsonProperty("journeyType") String journeyType, @JsonProperty("travelMode") String travelMode,
+            @JsonProperty("carType") String carType) {
+        super(origin, journeyType, travelMode, carType);
         this.id = id == 0 ? idCounter++ : id;
         this.co2e = co2e;
         this.distance = distance;
@@ -35,6 +38,7 @@ public class EmissionsData extends AbstractJourney {
         this.co2StoragePerYear = co2StoragePerYear;
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
         this.destination = destination;
+
     }
 
     // Getters

@@ -1,3 +1,4 @@
+
 package com.cbfacademy.apiassessment;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,8 +38,9 @@ public class EmissionsCalculatorService {
 
         if (destinationAddress == null) {
             logger.error("Destination address not found for ID: {}", destinationId);
-            // Log the error for further analysis, and return a default or empty response
-            return new EmissionsData(0, 0.0, 0.0, "Unknown", 0.0, 0.0, origin, "Unknown", journeyType);
+            // returns a default or empty response
+            return new EmissionsData(0, 0.0, 0.0, "Unknown", 0.0, 0.0, origin, "Unknown", journeyType, travelMode,
+                    carType);
         }
         try {
             URL url = new URL(API_URL);
@@ -73,8 +75,9 @@ public class EmissionsCalculatorService {
                 String treeSpecies = randomTree != null ? randomTree.getSpecies() : "Unknown";
                 double co2StoragePerYear = randomTree != null ? randomTree.getCo2StoragePerTreePerYear() : 0;
                 double co2AbsorptionIn80Years = randomTree != null ? randomTree.getCo2AbsorptionPerTreeIn80Years() : 0;
-                EmissionsData emissionsData = new EmissionsData(0, co2e, distanceKm, treeSpecies, co2StoragePerYear,
-                        co2AbsorptionIn80Years, origin, destination, journeyType);
+                EmissionsData emissionsData = new EmissionsData(id, co2e, distanceKm, treeSpecies, co2StoragePerYear,
+                        co2AbsorptionIn80Years, origin, destination, journeyType, travelMode, carType);
+
                 return emissionsData;
             }
         } catch (IOException e) {
