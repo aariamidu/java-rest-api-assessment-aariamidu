@@ -3,10 +3,14 @@ package com.cbfacademy.apiassessment;
 public abstract class AbstractJourney {
     protected String origin;
     private String journeyType;
+    private String travelMode;
+    private String carType;
 
-    public AbstractJourney(String origin, String journeyType) {
+    public AbstractJourney(String origin, String journeyType, String travelMode, String carType) {
         this.origin = origin;
         this.journeyType = journeyType;
+        this.travelMode = travelMode;
+        this.carType = carType;
     }
 
     public String getOrigin() {
@@ -17,6 +21,14 @@ public abstract class AbstractJourney {
         return journeyType;
     }
 
+    public String getTravelMode() {
+        return travelMode;
+    }
+
+    public String getCarType() {
+        return carType;
+    }
+
     public void setOrigin(String origin) {
         this.origin = origin;
     }
@@ -24,6 +36,14 @@ public abstract class AbstractJourney {
     public void setJourneyType(String journeyType) {
         this.journeyType = journeyType;
 
+    }
+
+    public void setTravelMode(String travelMode) {
+        this.travelMode = travelMode;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
     }
 
     public int getJourneyTypeAsInt() {

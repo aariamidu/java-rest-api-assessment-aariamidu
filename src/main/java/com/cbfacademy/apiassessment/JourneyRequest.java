@@ -3,8 +3,8 @@ package com.cbfacademy.apiassessment;
 public class JourneyRequest extends AbstractJourney {
     private int destinationId;
 
-    public JourneyRequest(String origin, int destinationId, String journeyType) {
-        super(origin, journeyType);
+    public JourneyRequest(String origin, int destinationId, String journeyType, String travelMode, String carType) {
+        super(origin, journeyType, travelMode, carType);
         this.destinationId = destinationId;
 
     }
