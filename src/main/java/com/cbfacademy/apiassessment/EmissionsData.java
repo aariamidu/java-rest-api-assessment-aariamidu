@@ -1,48 +1,61 @@
+
 package com.cbfacademy.apiassessment;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EmissionsData {
+public class EmissionsData extends AbstractJourney {
+    private static long idCounter = 1;
+    private long id;
     private double co2e;
     private double distance;
-    private String origin;
-    private String destination;
     private String treeSpecies;
     private double co2StoragePerYear;
     private double co2AbsorptionIn80Years;
-    private String journeyType;
+    private String destination;
 
-    // Constructors
-    public EmissionsData() {
-    }
+    @JsonIgnore
+    private int journeyTypeAsInt;
 
-    public EmissionsData(double co2e, double distance, String origin, String destination,
-            String treeSpecies, double co2StoragePerYear, double co2AbsorptionIn80Years) {
+    @JsonCreator
+    public EmissionsData(@JsonProperty("id") long id, @JsonProperty("co2e") double co2e,
+            @JsonProperty("distance") double distance,
+            @JsonProperty("treeSpecies") String treeSpecies,
+            @JsonProperty("co2StoragePerYear") double co2StoragePerYear,
+            @JsonProperty("co2AbsorptionIn80Years") double co2AbsorptionIn80Years,
+            @JsonProperty("origin") String origin,
+            @JsonProperty("destination") String destination,
+            @JsonProperty("journeyType") String journeyType, @JsonProperty("travelMode") String travelMode,
+            @JsonProperty("carType") String carType) {
+        super(origin, journeyType, travelMode, carType);
+        this.id = id == 0 ? idCounter++ : id;
         this.co2e = co2e;
         this.distance = distance;
-        this.origin = origin;
-        this.destination = destination;
         this.treeSpecies = treeSpecies;
         this.co2StoragePerYear = co2StoragePerYear;
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
+        this.destination = destination;
+
     }
 
     // Getters
+    public long getId() {
+        return id;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
     public double getCo2e() {
         return co2e;
     }
 
     public double getDistance() {
         return distance;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public String getDestination() {
-        return destination;
     }
 
     public String getTreeSpecies() {
@@ -58,20 +71,20 @@ public class EmissionsData {
     }
 
     // Setters
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
     public void setCo2e(double co2e) {
         this.co2e = co2e;
     }
 
     public void setDistance(double distance) {
         this.distance = distance;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
     }
 
     public void setTreeSpecies(String treeSpecies) {
@@ -86,29 +99,6 @@ public class EmissionsData {
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
     }
 
-    public String getJourneyType() {
-        return journeyType;
-    }
-
-    public void setJourneyType(String journeyType) {
-        this.journeyType = journeyType;
-
-    }
-
-    public int getJourneyTypeAsInt() {
-        if (journeyType == null) {
-            return 1; // Assuming default is 'one way'
-        }
-        String lowerCaseJourneyType = journeyType.toLowerCase();
-        if ("one way".equals(lowerCaseJourneyType)) {
-            return 1;
-        } else if ("return".equals(lowerCaseJourneyType)) {
-            return 2;
-        } else {
-            return 1; // Handle other cases or set a default value
-        }
-    }
-
     public String toJsonString() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -119,9 +109,9 @@ public class EmissionsData {
         }
     }
 
-    @Override
     public String toString() {
         return "EmissionsData{" +
+                "id=" + id +
                 "co2e=" + co2e +
                 ", distance=" + distance +
                 ", origin='" + origin + '\'' +

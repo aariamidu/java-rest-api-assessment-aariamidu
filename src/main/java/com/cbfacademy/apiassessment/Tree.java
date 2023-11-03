@@ -5,7 +5,7 @@ public class Tree {
     private String species;
     private double co2StoragePerTreePerYear;
     private double co2AbsorptionPerTreeIn80Years;
-    
+
     public Tree() {
     }
 
