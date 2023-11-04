@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EmissionsData extends AbstractJourney {
-    private static long idCounter = 1;
     private long id;
     private double co2e;
     private double distance;
@@ -31,7 +30,7 @@ public class EmissionsData extends AbstractJourney {
             @JsonProperty("journeyType") String journeyType, @JsonProperty("travelMode") String travelMode,
             @JsonProperty("carType") String carType) {
         super(origin, journeyType, travelMode, carType);
-        this.id = id == 0 ? idCounter++ : id;
+        this.id = id;
         this.co2e = co2e;
         this.distance = distance;
         this.treeSpecies = treeSpecies;
@@ -71,10 +70,6 @@ public class EmissionsData extends AbstractJourney {
     }
 
     // Setters
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public void setDestination(String destination) {
         this.destination = destination;
     }

@@ -23,6 +23,15 @@ public class EmissionsController {
     private final DestinationAddressService destinationAddressService;
     private final Logger logger = LoggerFactory.getLogger(EmissionsController.class);
 
+    private long generateCustomId(List<EmissionsData> emissionsDataList) {
+        long maxId = emissionsDataList.stream()
+                .mapToLong(EmissionsData::getId)
+                .max()
+                .orElse(0);
+
+        return maxId + 1;
+    }
+
     public EmissionsController(EmissionsCalculatorService emissionsCalculatorService,
             DestinationAddressService destinationAddressService) {
         this.emissionsCalculatorService = emissionsCalculatorService;
@@ -40,16 +49,16 @@ public class EmissionsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Destination address not found for the provided ID");
         }
-        int id = 0;
-        String travelMode = journeyRequest.getTravelMode();
-        String carType = journeyRequest.getCarType();
-        String origin = journeyRequest.getOrigin();
-        String journeyType = journeyRequest.getJourneyType();
-
-        EmissionsData emissionsData = emissionsCalculatorService.calculateEmissions(id, travelMode, carType, origin,
-                destinationId, journeyType);
 
         List<EmissionsData> existingEmissionsData = readEmissionsDataFromFile();
+
+        long newId = generateCustomId(existingEmissionsData);
+
+        EmissionsData emissionsData = emissionsCalculatorService.calculateEmissions(newId,
+                journeyRequest.getTravelMode(),
+                journeyRequest.getCarType(), journeyRequest.getOrigin(), destinationId,
+                journeyRequest.getJourneyType());
+
         existingEmissionsData.add(emissionsData);
         QuickSort quickSort = new QuickSort();
         quickSort.sort(existingEmissionsData);
@@ -79,7 +88,6 @@ public class EmissionsController {
             });
         } catch (IOException e) {
             e.printStackTrace();
-
             return new ArrayList<>();
         }
     }

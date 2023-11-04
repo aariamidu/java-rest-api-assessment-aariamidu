@@ -5,12 +5,17 @@ public class DestinationAddress {
     private String name;
     private String address;
 
-    public int getId() {
-        return id;
+    public DestinationAddress() {
     }
 
-    public void setId(int id) {
+    public DestinationAddress(int id, String name, String address) {
         this.id = id;
+        this.name = name;
+        this.address = address;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -28,5 +33,4 @@ public class DestinationAddress {
     public void setAddress(String address) {
         this.address = address;
     }
-
 }

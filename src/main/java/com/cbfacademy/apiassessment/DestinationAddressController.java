@@ -25,18 +25,7 @@ public class DestinationAddressController {
         return destinationAddressService.getDestinationAddresses();
     }
 
-    @GetMapping("/api/destination-addresses/{id}")
-    public ResponseEntity<DestinationAddress> getDestinationAddressById(@PathVariable int destinationId) {
-        DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
-        if (destinationAddress != null) {
-            return ResponseEntity.ok(destinationAddress);// If address found, return with 200 OK status
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(null);// If address not found, return with 404 Not Found status
-        }
-    }
-
-    @PostMapping("/api/destination-addresses/add")
+    @PostMapping("/api/destination-addresses/{id}")
     public ResponseEntity<DestinationAddress> addDestinationAddress(@RequestBody DestinationAddress address) {
         if (address != null && isValidDestinationAddress(address)) {
             DestinationAddress addedAddress = destinationAddressService.addDestinationAddress(address);
@@ -46,7 +35,17 @@ public class DestinationAddressController {
         }
     }
 
-    @PutMapping("/api/destination-addresses/update/{id}")
+    @DeleteMapping("/api/destination-addresses/{id}")
+    public ResponseEntity<String> deleteDestinationAddress(@PathVariable int id) {
+        boolean deletionResult = destinationAddressService.deleteDestinationAddress(id);
+        if (deletionResult) {
+            return new ResponseEntity<>("Address deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Address not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/api/destination-addresses/{id}")
     public ResponseEntity<DestinationAddress> updateDestinationAddress(@PathVariable int id,
             @RequestBody DestinationAddress address) {
         if (address != null && isValidDestinationAddress(address)) {
@@ -55,7 +54,6 @@ public class DestinationAddressController {
                 return new ResponseEntity<>(updatedAddress, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
             }
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -67,13 +65,14 @@ public class DestinationAddressController {
         return address != null;
     }
 
-    @DeleteMapping("/api/destination-addresses/delete/{id}")
-    public ResponseEntity<String> deleteDestinationAddress(@PathVariable int id) {
-        boolean deletionResult = destinationAddressService.deleteDestinationAddress(id);
-        if (deletionResult) {
-            return new ResponseEntity<>("Address deleted successfully", HttpStatus.OK);
+    @GetMapping("/api/destination-addresses/{id}")
+    public ResponseEntity<DestinationAddress> getDestinationAddressById(@PathVariable int destinationId) {
+        DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
+        if (destinationAddress != null) {
+            return ResponseEntity.ok(destinationAddress);// If address found, return with 200 OK status
         } else {
-            return new ResponseEntity<>("Address not found with the given ID", HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);// If address not found, return with 404 Not Found status
         }
     }
 

@@ -32,8 +32,8 @@ public class EmissionsCalculatorService {
         this.treeService = treeService;
     }
 
-    public EmissionsData calculateEmissions(int id, String travelMode, String carType, String origin, int destinationId,
-            String journeyType) {
+    public EmissionsData calculateEmissions(long id, String travelMode, String carType, String origin,
+            int destinationId, String journeyType) {
         DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
 
         if (destinationAddress == null) {
@@ -75,8 +75,10 @@ public class EmissionsCalculatorService {
                 String treeSpecies = randomTree != null ? randomTree.getSpecies() : "Unknown";
                 double co2StoragePerYear = randomTree != null ? randomTree.getCo2StoragePerTreePerYear() : 0;
                 double co2AbsorptionIn80Years = randomTree != null ? randomTree.getCo2AbsorptionPerTreeIn80Years() : 0;
+
                 EmissionsData emissionsData = new EmissionsData(id, co2e, distanceKm, treeSpecies, co2StoragePerYear,
-                        co2AbsorptionIn80Years, origin, destination, journeyType, travelMode, carType);
+                        co2AbsorptionIn80Years, origin, destinationAddress.getAddress(), journeyType, travelMode,
+                        carType);
 
                 return emissionsData;
             }

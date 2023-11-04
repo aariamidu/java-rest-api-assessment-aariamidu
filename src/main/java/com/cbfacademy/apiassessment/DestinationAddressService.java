@@ -41,15 +41,6 @@ public class DestinationAddressService {
         return null; // If address with the given ID not found
     }
 
-    public DestinationAddress addDestinationAddress(DestinationAddress address) {
-        List<DestinationAddress> addresses = getDestinationAddresses();
-        int newId = addresses.stream().mapToInt(DestinationAddress::getId).max().orElse(0) + 1;
-        address.setId(newId);
-        addresses.add(address);
-        saveDestinationAddresses(addresses);
-        return address;
-    }
-
     public DestinationAddress updateDestinationAddress(int id, DestinationAddress updatedAddress) {
         List<DestinationAddress> addresses = getDestinationAddresses();
         for (DestinationAddress address : addresses) {
@@ -75,6 +66,15 @@ public class DestinationAddressService {
             }
         }
         return false; // If address with the given ID not found
+    }
+
+    public DestinationAddress addDestinationAddress(DestinationAddress address) {
+        List<DestinationAddress> addresses = getDestinationAddresses();
+        int newId = addresses.stream().mapToInt(DestinationAddress::getId).max().orElse(0) + 1;
+        DestinationAddress newAddress = new DestinationAddress(newId, address.getName(), address.getAddress());
+        addresses.add(newAddress);
+        saveDestinationAddresses(addresses);
+        return newAddress;
     }
 
     public void saveDestinationAddresses(List<DestinationAddress> addresses) {
