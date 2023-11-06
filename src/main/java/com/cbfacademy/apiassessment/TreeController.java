@@ -4,9 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import java.util.List;
 
 @RestController
@@ -14,12 +11,12 @@ import java.util.List;
 public class TreeController {
 
     private final TreeService treeService;
-    private final ObjectMapper objectMapper;
+    private final JsonFileWriter jsonFileWriter;
 
-    public TreeController(TreeService treeService, ObjectMapper objectMapper) {
+    public TreeController(TreeService treeService, JsonFileWriter jsonFileWriter) {
         this.treeService = treeService;
-        this.objectMapper = objectMapper;
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        this.jsonFileWriter = jsonFileWriter;
+
     }
 
     @GetMapping
@@ -42,7 +39,13 @@ public class TreeController {
     public ResponseEntity<Tree> addTree(@RequestBody Tree tree) {
         if (tree != null && isValidTree(tree)) {
             Tree addedTree = treeService.addTree(tree);
-            return new ResponseEntity<>(addedTree, HttpStatus.CREATED);
+            boolean writeSuccess = jsonFileWriter.writeTreesJsonFile(treeService.getAllTrees());
+
+            if (writeSuccess) {
+                return new ResponseEntity<>(addedTree, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -11,6 +11,18 @@
   "travelMode" : "rail",
   "carType" : null
 }, {
+  "id" : 4,
+  "co2e" : 2.168,
+  "distance" : 48.8,
+  "treeSpecies" : "Pine",
+  "co2StoragePerYear" : 14.39,
+  "co2AbsorptionIn80Years" : 1150.96,
+  "origin" : "RG21 4EQ",
+  "destination" : "Lovelace Road, Bracknell, RG12 8SN, United Kingdom",
+  "journeyType" : "single",
+  "travelMode" : "rail",
+  "carType" : null
+}, {
   "id" : 1,
   "co2e" : 27.64,
   "distance" : 622.2,

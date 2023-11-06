@@ -15,9 +15,12 @@ import java.util.List;
 public class DestinationAddressController {
 
     private final DestinationAddressService destinationAddressService;
+    private final JsonFileWriter jsonFileWriter;
 
-    public DestinationAddressController(DestinationAddressService destinationAddressService) {
+    public DestinationAddressController(DestinationAddressService destinationAddressService,
+            JsonFileWriter jsonFileWriter) {
         this.destinationAddressService = destinationAddressService;
+        this.jsonFileWriter = jsonFileWriter;
     }
 
     @GetMapping("/api/destination-addresses")
@@ -29,7 +32,14 @@ public class DestinationAddressController {
     public ResponseEntity<DestinationAddress> addDestinationAddress(@RequestBody DestinationAddress address) {
         if (address != null && isValidDestinationAddress(address)) {
             DestinationAddress addedAddress = destinationAddressService.addDestinationAddress(address);
-            return new ResponseEntity<>(addedAddress, HttpStatus.CREATED);
+            boolean writeSuccess = jsonFileWriter
+                    .writeDestinationJsonFile(destinationAddressService.getDestinationAddresses());
+
+            if (writeSuccess) {
+                return new ResponseEntity<>(addedAddress, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
