@@ -1,4 +1,3 @@
-
 package com.cbfacademy.apiassessment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -20,15 +19,18 @@ public class EmissionsData extends AbstractJourney {
     private int journeyTypeAsInt;
 
     @JsonCreator
-    public EmissionsData(@JsonProperty("id") long id, @JsonProperty("co2e") double co2e,
+    public EmissionsData(
+            @JsonProperty("id") long id,
+            @JsonProperty("origin") String origin,
+            @JsonProperty("destination") String destination,
+            @JsonProperty("travelMode") String travelMode,
+            @JsonProperty("carType") String carType,
+            @JsonProperty("journeyType") String journeyType,
+            @JsonProperty("co2e") double co2e,
             @JsonProperty("distance") double distance,
             @JsonProperty("treeSpecies") String treeSpecies,
             @JsonProperty("co2StoragePerYear") double co2StoragePerYear,
-            @JsonProperty("co2AbsorptionIn80Years") double co2AbsorptionIn80Years,
-            @JsonProperty("origin") String origin,
-            @JsonProperty("destination") String destination,
-            @JsonProperty("journeyType") String journeyType, @JsonProperty("travelMode") String travelMode,
-            @JsonProperty("carType") String carType) {
+            @JsonProperty("co2AbsorptionIn80Years") double co2AbsorptionIn80Years) {
         super(origin, journeyType, travelMode, carType);
         this.id = id;
         this.co2e = co2e;
@@ -37,7 +39,6 @@ public class EmissionsData extends AbstractJourney {
         this.co2StoragePerYear = co2StoragePerYear;
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
         this.destination = destination;
-
     }
 
     // Getters

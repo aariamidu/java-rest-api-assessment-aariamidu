@@ -8,44 +8,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/destination-addresses")
 public class DestinationAddressController {
 
     private final DestinationAddressService destinationAddressService;
-    private final JsonFileWriter jsonFileWriter;
 
     public DestinationAddressController(DestinationAddressService destinationAddressService,
             JsonFileWriter jsonFileWriter) {
         this.destinationAddressService = destinationAddressService;
-        this.jsonFileWriter = jsonFileWriter;
+
     }
 
-    @GetMapping("/api/destination-addresses")
+    @GetMapping
     public List<DestinationAddress> getDestinationAddresses() {
         return destinationAddressService.getDestinationAddresses();
     }
 
-    @PostMapping("/api/destination-addresses/{id}")
+    @PostMapping
     public ResponseEntity<DestinationAddress> addDestinationAddress(@RequestBody DestinationAddress address) {
-        if (address != null && isValidDestinationAddress(address)) {
-            DestinationAddress addedAddress = destinationAddressService.addDestinationAddress(address);
-            boolean writeSuccess = jsonFileWriter
-                    .writeDestinationJsonFile(destinationAddressService.getDestinationAddresses());
-
-            if (writeSuccess) {
-                return new ResponseEntity<>(addedAddress, HttpStatus.CREATED);
-            } else {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            destinationAddressService.addDestinationAddress(address);
+            return new ResponseEntity<>(address, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/api/destination-addresses/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDestinationAddress(@PathVariable int id) {
         boolean deletionResult = destinationAddressService.deleteDestinationAddress(id);
         if (deletionResult) {
@@ -55,7 +50,7 @@ public class DestinationAddressController {
         }
     }
 
-    @PutMapping("/api/destination-addresses/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<DestinationAddress> updateDestinationAddress(@PathVariable int id,
             @RequestBody DestinationAddress address) {
         if (address != null && isValidDestinationAddress(address)) {
@@ -75,9 +70,9 @@ public class DestinationAddressController {
         return address != null;
     }
 
-    @GetMapping("/api/destination-addresses/{id}")
-    public ResponseEntity<DestinationAddress> getDestinationAddressById(@PathVariable int destinationId) {
-        DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
+    @GetMapping("/{id}")
+    public ResponseEntity<DestinationAddress> getDestinationAddressById(@PathVariable int id) {
+        DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(id);
         if (destinationAddress != null) {
             return ResponseEntity.ok(destinationAddress);// If address found, return with 200 OK status
         } else {
@@ -86,8 +81,6 @@ public class DestinationAddressController {
         }
     }
 
-    @PostMapping("/api/destination-addresses")
     public void saveDestinationAddresses(@RequestBody List<DestinationAddress> addresses) {
-        destinationAddressService.saveDestinationAddresses(addresses);
     }
 }

@@ -15,9 +15,11 @@ public class DestinationAddressService {
 
     private static final String DESTINATION_FILE_PATH = "src/main/resources/destination.json";
     private final ObjectMapper objectMapper;
+    private final JsonFileWriter jsonFileWriter;
 
-    public DestinationAddressService() {
+    public DestinationAddressService(JsonFileWriter jsonFileWriter) {
         this.objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        this.jsonFileWriter = jsonFileWriter;
     }
 
     public List<DestinationAddress> getDestinationAddresses() {
@@ -39,6 +41,19 @@ public class DestinationAddressService {
             }
         }
         return null; // If address with the given ID not found
+    }
+
+    public void addDestinationAddress(DestinationAddress newAddress) {
+        List<DestinationAddress> addresses = getDestinationAddresses();
+        int maxId = addresses.stream().mapToInt(DestinationAddress::getId).max().orElse(0);
+        int newId = maxId + 1;
+        DestinationAddress destinationAddress = new DestinationAddress(newId, newAddress.getName(),
+                newAddress.getAddress());
+        addresses.add(destinationAddress);
+        boolean writeSuccess = jsonFileWriter.writeDestinationJsonFile(addresses);
+        if (!writeSuccess) {
+            System.out.println("Failed to write addresses to destination.json");
+        }
     }
 
     public DestinationAddress updateDestinationAddress(int id, DestinationAddress updatedAddress) {
@@ -66,15 +81,6 @@ public class DestinationAddressService {
             }
         }
         return false; // If address with the given ID not found
-    }
-
-    public DestinationAddress addDestinationAddress(DestinationAddress address) {
-        List<DestinationAddress> addresses = getDestinationAddresses();
-        int newId = addresses.stream().mapToInt(DestinationAddress::getId).max().orElse(0) + 1;
-        DestinationAddress newAddress = new DestinationAddress(newId, address.getName(), address.getAddress());
-        addresses.add(newAddress);
-        saveDestinationAddresses(addresses);
-        return newAddress;
     }
 
     public void saveDestinationAddresses(List<DestinationAddress> addresses) {

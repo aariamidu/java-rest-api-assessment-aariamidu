@@ -34,13 +34,15 @@ public class EmissionsCalculatorService {
 
     public EmissionsData calculateEmissions(long id, String travelMode, String carType, String origin,
             int destinationId, String journeyType) {
+
         DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
 
         if (destinationAddress == null) {
             logger.error("Destination address not found for ID: {}", destinationId);
             // Returns a default or empty response
-            return new EmissionsData(0, 0.0, 0.0, "Unknown", 0.0, 0.0, origin, "Unknown", journeyType, travelMode,
-                    carType);
+            return new EmissionsData(0, origin, "Unknown", travelMode, carType, journeyType, 0.0, 0.0, "Unknown", 0.0,
+                    0.0);
+
         }
         try {
             URL url = new URL(API_URL);
@@ -76,9 +78,9 @@ public class EmissionsCalculatorService {
                 double co2StoragePerYear = randomTree != null ? randomTree.getCo2StoragePerTreePerYear() : 0;
                 double co2AbsorptionIn80Years = randomTree != null ? randomTree.getCo2AbsorptionPerTreeIn80Years() : 0;
 
-                EmissionsData emissionsData = new EmissionsData(id, co2e, distanceKm, treeSpecies, co2StoragePerYear,
-                        co2AbsorptionIn80Years, origin, destinationAddress.getAddress(), journeyType, travelMode,
-                        carType);
+                EmissionsData emissionsData = new EmissionsData(id, origin, destinationAddress.getAddress(), travelMode,
+                        carType,
+                        journeyType, co2e, distanceKm, treeSpecies, co2StoragePerYear, co2AbsorptionIn80Years);
 
                 return emissionsData;
             }
