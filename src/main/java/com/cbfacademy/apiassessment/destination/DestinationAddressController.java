@@ -1,4 +1,4 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.destination;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cbfacademy.apiassessment.emissions.JsonFileWriter;
+
 import java.util.List;
 
 @RestController

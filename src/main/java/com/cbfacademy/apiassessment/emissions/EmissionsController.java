@@ -1,12 +1,17 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.emissions;
 
 import java.util.List;
+
+import com.cbfacademy.apiassessment.destination.DestinationAddress;
+import com.cbfacademy.apiassessment.destination.DestinationAddressService;
+import com.cbfacademy.apiassessment.destination.JourneyRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +26,7 @@ public class EmissionsController {
     private final DestinationAddressService destinationAddressService;
     private final JsonFileWriter jsonFileWriter;
     private final Logger logger = LoggerFactory.getLogger(EmissionsController.class);
+    private final QuickSort quickSort;
 
     private long generateCustomId(List<EmissionsData> emissionsDataList) {
         long maxId = emissionsDataList.stream()
@@ -32,10 +38,11 @@ public class EmissionsController {
     }
 
     public EmissionsController(EmissionsCalculatorService emissionsCalculatorService,
-            DestinationAddressService destinationAddressService, JsonFileWriter jsonFileWriter) {
+            DestinationAddressService destinationAddressService, JsonFileWriter jsonFileWriter, QuickSort quickSort) {
         this.emissionsCalculatorService = emissionsCalculatorService;
         this.destinationAddressService = destinationAddressService;
         this.jsonFileWriter = jsonFileWriter;
+        this.quickSort = quickSort;
     }
 
     @PostMapping
@@ -60,9 +67,6 @@ public class EmissionsController {
                 journeyRequest.getJourneyType());
 
         existingEmissionsData.add(emissionsData);
-        QuickSort quickSort = new QuickSort();
-        quickSort.sort(existingEmissionsData);
-
         boolean writeSuccess = jsonFileWriter.writeEmissionsJsonFile(existingEmissionsData);
 
         if (writeSuccess) {
@@ -74,11 +78,31 @@ public class EmissionsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EmissionsData>> getEmissionsData() {
+    public ResponseEntity<?> getEmissionsData(@RequestParam(required = false) String sortBy) {
         List<EmissionsData> emissionsDataList = readEmissionsDataFromFile();
 
         if (emissionsDataList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        if (sortBy != null && !sortBy.isEmpty()) {
+            switch (sortBy) {
+                case "id":
+                    // Sort by id
+                    quickSort.sort(emissionsDataList, sortBy);
+                    break;
+                case "distance":
+                    // Sort by distance
+                    quickSort.sort(emissionsDataList, sortBy);
+                    break;
+                case "co2e":
+                    // Sort by co2e
+                    quickSort.sort(emissionsDataList, sortBy);
+                    break;
+                default:
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("Unsupported sorting criteria: " + sortBy);
+            }
         }
 
         return ResponseEntity.ok(emissionsDataList);

@@ -1,4 +1,4 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.trees;
 
 public class Tree {
     private Long id;

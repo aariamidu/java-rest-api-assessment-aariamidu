@@ -1,4 +1,4 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.destination;
 
 public abstract class AbstractJourney {
     protected String origin;

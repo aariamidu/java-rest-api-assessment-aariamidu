@@ -1,4 +1,4 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.destination;
 
 public class JourneyRequest extends AbstractJourney {
     private int destinationId;

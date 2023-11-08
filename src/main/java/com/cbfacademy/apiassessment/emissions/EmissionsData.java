@@ -1,5 +1,6 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.emissions;
 
+import com.cbfacademy.apiassessment.destination.AbstractJourney;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

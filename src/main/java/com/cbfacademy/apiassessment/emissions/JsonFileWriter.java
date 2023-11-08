@@ -1,5 +1,5 @@
 
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.emissions;
 
 import org.springframework.stereotype.Component;
 

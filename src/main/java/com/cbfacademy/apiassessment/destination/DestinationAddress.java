@@ -1,4 +1,4 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.destination;
 
 public class DestinationAddress {
     private int id;

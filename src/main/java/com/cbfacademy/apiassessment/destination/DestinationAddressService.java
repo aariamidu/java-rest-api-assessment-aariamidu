@@ -1,9 +1,9 @@
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.destination;
 
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
+import com.cbfacademy.apiassessment.emissions.JsonFileWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,10 +1,16 @@
 
-package com.cbfacademy.apiassessment;
+package com.cbfacademy.apiassessment.emissions;
 
+import com.cbfacademy.apiassessment.destination.DestinationAddress;
+import com.cbfacademy.apiassessment.destination.DestinationAddressService;
+import com.cbfacademy.apiassessment.trees.Tree;
+import com.cbfacademy.apiassessment.trees.TreeService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +26,8 @@ import org.slf4j.LoggerFactory;
 public class EmissionsCalculatorService {
 
     private static final String API_URL = "https://beta4.api.climatiq.io/travel/distance";
-    private static final String API_KEY = "FC2PSR1GFXM6PYKMGN1W70SQVSPZ";
+    @Value("${api.key}")
+    private String apiKey;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private List<EmissionsData> emissionsDataList = new ArrayList<>();
     private final TreeService treeService;
@@ -49,7 +56,7 @@ public class EmissionsCalculatorService {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Authorization", "Bearer " + API_KEY);
+            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
             connection.setDoOutput(true);
 
             String destination = destinationAddress.getAddress();
