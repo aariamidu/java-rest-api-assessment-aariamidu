@@ -1,114 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eco Emissions Calculator</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            background-color: #f7f9f7;
-            font-family: Arial, sans-serif;
-            background-image: url('forest.jpg');
-            background-size: cover;
-        }
+      body {
+        background-color: #f7f9f7;
+        font-family: Arial, sans-serif;
+      }
 
-        .container-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      .container-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 400px;
-            text-align: center;
-        }
+      .container {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        width: 400px;
+        text-align: center;
+      }
 
-        h1 {
-            color: #4CAF50;
-        }
+      h1 {
+        color: #4caf50;
+      }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+      .form-group {
+        margin-bottom: 20px;
+      }
 
-        label {
-            font-weight: bold;
-            color: #4CAF50;
-        }
+      label {
+        font-weight: bold;
+        color: #4caf50;
+      }
 
-        .btn-primary {
-            background-color: #4CAF50;
-            border: none;
-        }
+      .btn-primary {
+        background-color: #4caf50;
+        border: none;
+      }
 
-        .btn-primary:hover {
-            background-color: #45a049;
-        }
+      .btn-primary:hover {
+        background-color: #45a049;
+      }
 
-        #output {
-            margin-top: 30px;
-        }
+      #outputContainer {
+        margin-top: 30px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container-wrapper">
-        <div class="container">
-            <h1>Eco Emissions Calculator</h1>
+      <div class="container">
+        <h1>Eco Emissions Calculator</h1>
 
-            <div class="form-group">
-                <label for="travelMode">Travel Mode:</label>
-                <select class="form-control" id="travelModeSelect">
-                    <option value="">Select Travel Mode</option>
-                    <option value="air">Air</option>
-                    <option value="car">Car</option>
-                    <option value="rail">Rail</option>
-                </select>
-            </div>
+        <form id="emissionsForm">
+          <div class="form-group">
+            <label for="destination">Destination:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="destination"
+              placeholder="Enter Destination"
+            />
+          </div>
 
-            <div class="form-group">
-                <label for="carType">Car Type:</label>
-                <select class="form-control" id="carType">
-                    <option value="">Select fuel type for car if applicable</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="plugin_hybrid">Plugin Hybrid</option>
-                    <option value="battery">Battery</option>
-                </select>
-            </div>
+          <div class="form-group">
+            <label for="travelMode">Travel Mode:</label>
+            <select class="form-control" id="travelModeSelect">
+              <option value="">Select Travel Mode</option>
+              <option value="air">Air</option>
+              <option value="car">Car</option>
+              <option value="rail">Rail</option>
+            </select>
+          </div>
 
-    <div class="form-group">
-        <label for="origin">Origin:</label>
-        <input type="text" class="form-control" id="origin" placeholder="Enter Origin">
-    </div>
+          <div class="form-group">
+            <label for="carType">Car Type:</label>
+            <select class="form-control" id="carType">
+              <option value="">Select fuel type for car if applicable</option>
+              <option value="petrol">Petrol</option>
+              <option value="diesel">Diesel</option>
+              <option value="plugin_hybrid">Plugin Hybrid</option>
+              <option value="battery">Battery</option>
+            </select>
+          </div>
 
+          <div class="form-group">
+            <label for="origin">Origin:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="origin"
+              placeholder="Enter Origin"
+            />
+          </div>
 
-            <div class="form-group">
-                <label for="destination">Destination:</label>
-                <select class="form-select" id="destination"></select>
-            </div>
+          <div class="form-group">
+            <label for="returnJourney">Return Journey:</label>
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="returnJourney"
+            />
+          </div>
 
-            <div class="form-group">
-                <label for="returnJourney">Return Journey:</label>
-                <input type="checkbox" class="form-check-input" id="returnJourney">
-            </div>
+          <button type="button" class="btn btn-primary" id="calculateButton">
+            Calculate
+          </button>
+        </form>
 
-
-            <button class="btn btn-primary" id="calculateButton">Calculate</button>
-
-            <div id="outputContainer" class="mt-4"></div>
-        </div>
+        <div id="outputContainer" class="mt-4"></div>
+      </div>
     </div>
 
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
+  </body>
 </html>

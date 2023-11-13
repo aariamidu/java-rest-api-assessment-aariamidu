@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const calculateButton = document.getElementById("calculateButton");
   const outputContainer = document.getElementById("outputContainer");
 
-  let emissionResultDiv;
-
   async function calculateEmissions(event) {
     event.preventDefault();
     console.log("Calculate button clicked!");
@@ -15,11 +13,22 @@ document.addEventListener("DOMContentLoaded", async function () {
     const travelMode = travelModeSelect.value;
     const carType = document.getElementById("carType").value;
     const origin = originInput.value;
-    const destination = destinationSelect.value;
-    const isReturnJourney = returnJourneyCheckbox.checked;
+    const destinationId = parseInt(destinationSelect.value, 10);
+
+    if (!destinationId) {
+      outputContainer.innerHTML = "<p>Please select a destination address.</p>";
+      return;
+    }
+
+    console.log("Request Data:", {
+      origin: origin,
+      destinationId: destinationId,
+      travelMode: travelMode,
+      carType: carType,
+      journeyType: returnJourneyCheckbox.checked ? "return" : "one way",
+    });
 
     try {
-      // Fetch emissions data from your API endpoint
       const emissionsResponse = await fetch(
         "http://localhost:8080/api/journeys",
         {
@@ -29,51 +38,55 @@ document.addEventListener("DOMContentLoaded", async function () {
           },
           body: JSON.stringify({
             origin: origin,
-            destination: destination,
+            destinationId: destinationId,
             travelMode: travelMode,
-            carType: carType, // Add carType to the request body
-            journeyType: isReturnJourney ? "return" : "one way",
+            carType: carType,
+            journeyType: returnJourneyCheckbox.checked ? "return" : "one way",
           }),
         }
       );
 
       if (emissionsResponse.ok) {
-        const emissionsData = await emissionsResponse.json();
+        const responseText = await emissionsResponse.text();
+        console.log("Raw Response Text:", responseText);
 
-        emissionResultDiv = document.createElement("div");
-        emissionResultDiv.innerHTML = `<p><strong>CO2 Emissions:</strong> ${emissionsData.co2e} kg</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>Distance:</strong> ${emissionsData.distance} km</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>Origin:</strong> ${emissionsData.origin}</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>Destination:</strong> ${emissionsData.destination}</p>`;
-        // Displaying random tree data
-        emissionResultDiv.innerHTML += `<p><strong>Tree Species:</strong> ${emissionsData.treeSpecies}</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>CO2 Storage per Tree per Year:</strong> ${emissionsData.co2StoragePerYear} kg</p>`;
-        emissionResultDiv.innerHTML += `<p><strong>CO2 Absorption per Tree in 80 Years:</strong> ${emissionsData.co2AbsorptionIn80Years} kg</p>`;
+        if (responseText.includes("Emissions data saved successfully!")) {
+          outputContainer.innerHTML =
+            "<p>Emissions data saved successfully!</p>";
+        } else {
+          try {
+            const responseData = JSON.parse(responseText);
 
-        outputContainer.innerHTML = "";
-        outputContainer.appendChild(emissionResultDiv);
-
-        console.log("Emissions data received successfully!");
+            if (responseData.error) {
+              console.error("Error saving emissions data:", responseData.error);
+              outputContainer.innerHTML = `<p>${responseData.error}</p>`;
+            } else {
+              displayEmissionsData(responseData);
+            }
+          } catch (jsonError) {
+            console.error("Error parsing JSON response:", jsonError);
+            outputContainer.innerHTML =
+              "<p>An error occurred while processing emissions data.</p>";
+          }
+        }
       } else {
+        console.error("Error response:", await emissionsResponse.text());
         outputContainer.innerHTML =
           "<p>An error occurred while calculating emissions.</p>";
       }
     } catch (error) {
       console.error("Error:", error);
-
       outputContainer.innerHTML =
         "<p>An error occurred. Please try again later.</p>";
     }
   }
 
-  // Attaching the calculateEmissions function to the button click event
   if (calculateButton) {
     calculateButton.addEventListener("click", calculateEmissions);
   } else {
     console.error("Error: calculateButton not found in the document.");
   }
 
-  // Fetching destination data
   async function getDestination() {
     try {
       const destinationsResponse = await fetch(
@@ -83,10 +96,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (destinationsResponse.ok) {
         const addresses = await destinationsResponse.json();
         console.log("Destination Addresses:", addresses);
+
         if (Array.isArray(addresses)) {
           addresses.forEach((address) => {
             const option = document.createElement("option");
-            option.value = address.address;
+            option.value = address.id;
             option.textContent = address.name;
             destinationSelect.appendChild(option);
           });
@@ -103,10 +117,37 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     } catch (error) {
       console.error("Error:", error);
-
       outputContainer.innerHTML =
         "<p>An error occurred. Please try again later.</p>";
     }
+  }
+
+  function displayEmissionsData(emissionsData) {
+    // Clear previous results
+    outputContainer.innerHTML = "";
+
+    const resultHeading = document.createElement("h2");
+    resultHeading.textContent = "Emissions Data:";
+    outputContainer.appendChild(resultHeading);
+
+    const dataParagraphs = [
+      `Origin: ${emissionsData.origin}`,
+      `Destination: ${emissionsData.destination}`,
+      `Travel Mode: ${emissionsData.travelMode}`,
+      `Car Type: ${emissionsData.carType}`,
+      `Journey Type: ${emissionsData.journeyType}`,
+      `CO2e: ${emissionsData.co2e} kg`,
+      `Distance: ${emissionsData.distance} km`,
+      `Tree Species: ${emissionsData.treeSpecies}`,
+      `CO2 Storage Per Year: ${emissionsData.co2StoragePerYear}`,
+      `CO2 Absorption in 80 Years: ${emissionsData.co2AbsorptionIn80Years}`,
+    ];
+
+    dataParagraphs.forEach((paragraphText) => {
+      const dataParagraph = document.createElement("p");
+      dataParagraph.textContent = paragraphText;
+      outputContainer.appendChild(dataParagraph);
+    });
   }
 
   getDestination();

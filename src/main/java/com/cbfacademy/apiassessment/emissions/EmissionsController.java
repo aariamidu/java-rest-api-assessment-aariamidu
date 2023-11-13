@@ -30,6 +30,7 @@ public class EmissionsController {
 
     private long generateCustomId(List<EmissionsData> emissionsDataList) {
         long maxId = emissionsDataList.stream()
+                .filter(emissionData -> emissionData != null)
                 .mapToLong(EmissionsData::getId)
                 .max()
                 .orElse(0);
