@@ -10,8 +10,13 @@
     />
     <style>
       body {
-        background-color: #f7f9f7;
+        background-image: url("/src/forest.jpg");
+        background-size: cover;
         font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow: hidden;
       }
 
       .container-wrapper {
@@ -62,16 +67,52 @@
     <div class="container-wrapper">
       <div class="container">
         <h1>Eco Emissions Calculator</h1>
-
         <form id="emissionsForm">
           <div class="form-group">
             <label for="destination">Destination:</label>
-            <input
-              type="text"
-              class="form-control"
-              id="destination"
-              placeholder="Enter Destination"
-            />
+            <select class="form-control" id="destinationSelect">
+              <option value="">Select Destination</option>
+              <option
+                value="1"
+                data-info="ID: 1, Name: Fujitsu Office Manchester"
+              >
+                Fujitsu Office Manchester
+              </option>
+              <option
+                value="2"
+                data-info="ID: 2, Name: Fujitsu Office Berkshire"
+              >
+                Fujitsu Office Berkshire
+              </option>
+              <option
+                value="3"
+                data-info="ID: 3, Name: Fujitsu Office Birmingham"
+              >
+                Fujitsu Office Birmingham
+              </option>
+              <option value="4" data-info="ID: 4, Name: Fujitsu Office London">
+                Fujitsu Office London
+              </option>
+              <option
+                value="5"
+                data-info="ID: 5, Name: Fujitsu Office Basingstoke"
+              >
+                Fujitsu Office Basingstoke
+              </option>
+              <option
+                value="6"
+                data-info="ID: 6, Name: Fujitsu Office Chippenham"
+              >
+                Fujitsu Office Chippenham
+              </option>
+              <option
+                value="7"
+                data-info="ID: 7, Name: Fujitsu Office Stevenage"
+              >
+                Fujitsu Office Stevenage
+              </option>
+            </select>
+            <div id="destinationInfo"></div>
           </div>
 
           <div class="form-group">
@@ -113,12 +154,10 @@
               id="returnJourney"
             />
           </div>
-
-          <button type="button" class="btn btn-primary" id="calculateButton">
-            Calculate
-          </button>
         </form>
-
+        <button type="submit" class="btn btn-primary" id="calculateButton">
+          Calculate
+        </button>
         <div id="outputContainer" class="mt-4"></div>
       </div>
     </div>
