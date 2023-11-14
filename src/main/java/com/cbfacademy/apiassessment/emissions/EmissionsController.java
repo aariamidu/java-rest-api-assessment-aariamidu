@@ -109,6 +109,20 @@ public class EmissionsController {
         return ResponseEntity.ok(emissionsDataList);
     }
 
+    @GetMapping("/last")
+    public ResponseEntity<?> getLastEmissionData() {
+        List<EmissionsData> emissionsDataList = readEmissionsDataFromFile();
+
+        if (emissionsDataList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        // Retrieves the last item in the list
+        EmissionsData lastJourney = emissionsDataList.get(emissionsDataList.size() - 1);
+
+        return ResponseEntity.ok(lastJourney);
+    }
+
     private List<EmissionsData> readEmissionsDataFromFile() {
         TypeReference<List<EmissionsData>> typeReference = new TypeReference<List<EmissionsData>>() {
         };

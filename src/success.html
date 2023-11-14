@@ -17,13 +17,9 @@
         padding: 0;
         height: 100vh;
         overflow: hidden;
-      }
-
-      .container-wrapper {
         display: flex;
-        justify-content: center;
         align-items: center;
-        height: 100vh;
+        justify-content: center;
       }
 
       .container {
@@ -39,8 +35,9 @@
         color: #4caf50;
       }
 
-      #outputContainer {
-        margin-top: 30px;
+      #outputContainer,
+      #treeInfoContainer {
+        margin-top: 20px;
       }
 
       #goBackButton {
@@ -55,20 +52,122 @@
       #goBackButton:hover {
         background-color: #45a049;
       }
+
+      .emission-info {
+        font-weight: bold;
+        color: #4caf50;
+      }
+
+      .emission-value {
+        margin-bottom: 15px;
+      }
+
+      .tree-info {
+        font-weight: bold;
+        margin-top: 20px;
+        color: #4caf50;
+      }
+
+      #suggestion {
+        margin-top: 20px;
+        color: #333;
+        font-style: italic;
+      }
     </style>
   </head>
 
   <body>
-    <div class="container-wrapper">
-      <div class="container">
-        <h1>Data Saved Successfully!</h1>
-        <div id="outputContainer"></div>
-        <button id="goBackButton">Go Back to Emissions Calculator</button>
+    <div class="container">
+      <h1>Data Saved Successfully!</h1>
+      <div id="outputContainer">
+        <div class="emission-value" id="distance"></div>
+        <div class="emission-value" id="co2e"></div>
       </div>
+      <div id="suggestion">
+        <p>
+          Did you know? Growing a tree can help sequester CO2 and reduce your
+          carbon footprint. Consider planting a tree to contribute to a greener
+          environment!
+        </p>
+      </div>
+      <div id="treeInfoContainer">
+        <div class="emission-value" id="species"></div>
+        <div class="emission-value" id="co2StoragePerYear"></div>
+        <div class="emission-value" id="co2AbsorptionIn80Years"></div>
+      </div>
+      <button id="goBackButton">Go Back to Emissions Calculator</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://localhost:8080/api/journeys", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("API Response Data:", data);
+
+            const distanceElement = document.getElementById("distance");
+            const co2eElement = document.getElementById("co2e");
+            const speciesElement = document.getElementById("species");
+            const co2StoragePerYearElement =
+              document.getElementById("co2StoragePerYear");
+            const co2AbsorptionIn80YearsElement = document.getElementById(
+              "co2AbsorptionIn80Years"
+            );
+
+            if (Array.isArray(data) && data.length > 0) {
+              const lastJourney = data[data.length - 1];
+
+              distanceElement.innerHTML = `<div class="emission-info">Distance:</div> <div class="emission-value">${
+                lastJourney.distance !== undefined
+                  ? lastJourney.distance.toFixed(2) + " km"
+                  : "N/A"
+              }</div>`;
+              co2eElement.innerHTML = `<div class="emission-info">CO2 Emissions:</div> <div class="emission-value">${
+                lastJourney.co2e !== undefined
+                  ? lastJourney.co2e.toFixed(2) + " kg"
+                  : "N/A"
+              }</div>`;
+
+              if (lastJourney.treeSpecies !== undefined) {
+                speciesElement.innerHTML = `<div class="tree-info">Species:</div> <div class="emission-value">${lastJourney.treeSpecies}</div>`;
+                co2StoragePerYearElement.innerHTML = `<div class="tree-info">CO2 Storage per Year:</div> <div class="emission-value">${
+                  lastJourney.co2StoragePerYear !== undefined
+                    ? lastJourney.co2StoragePerYear.toFixed(2) + " kg"
+                    : "N/A"
+                }</div>`;
+                co2AbsorptionIn80YearsElement.innerHTML = `<div class="tree-info">CO2 Absorption in 80 Years:</div> <div class="emission-value">${
+                  lastJourney.co2AbsorptionIn80Years !== undefined
+                    ? lastJourney.co2AbsorptionIn80Years.toFixed(2) + " kg"
+                    : "N/A"
+                }</div>`;
+              } else {
+                speciesElement.innerHTML =
+                  "<div class='tree-info'>No tree information available.</div>";
+                co2StoragePerYearElement.innerHTML = "";
+                co2AbsorptionIn80YearsElement.innerHTML = "";
+              }
+            } else {
+              distanceElement.innerHTML =
+                "<div class='emission-info'>Distance:</div> <div class='emission-value'>N/A</div>";
+              co2eElement.innerHTML =
+                "<div class='emission-info'>CO2 Emissions:</div> <div class='emission-value'>N/A</div>";
+              speciesElement.innerHTML =
+                "<div class='tree-info'>No journey data available.</div>";
+              co2StoragePerYearElement.innerHTML = "";
+              co2AbsorptionIn80YearsElement.innerHTML = "";
+            }
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+          });
+      });
+
       document
         .getElementById("goBackButton")
         .addEventListener("click", function () {

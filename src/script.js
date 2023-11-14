@@ -1,5 +1,4 @@
 async function calculateEmissions(event) {
-  event.preventDefault();
   const destinationSelect = document.getElementById("destinationSelect");
   const travelModeSelect = document.getElementById("travelModeSelect");
   const originInput = document.getElementById("origin");
@@ -14,7 +13,6 @@ async function calculateEmissions(event) {
 
   if (!destinationId) {
     outputContainer.innerHTML = "<p>Please select a destination address.</p>";
-    return false;
   }
   document
     .getElementById("destinationSelect")
@@ -54,8 +52,6 @@ async function calculateEmissions(event) {
     outputContainer.innerHTML =
       "<p>An error occurred. Please try again later.</p>";
   }
-
-  return false;
 }
 
 if (calculateButton) {
