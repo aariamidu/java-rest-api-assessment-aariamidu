@@ -226,4 +226,16 @@
   "treeSpecies" : "Pine",
   "co2StoragePerYear" : 14.39,
   "co2AbsorptionIn80Years" : 1150.96
+}, {
+  "id" : 20,
+  "origin" : "California",
+  "destination" : "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU",
+  "travelMode" : "air",
+  "carType" : "",
+  "journeyType" : "one way",
+  "co2e" : 1786.0,
+  "distance" : 8338.0,
+  "treeSpecies" : "Oak",
+  "co2StoragePerYear" : 18.87,
+  "co2AbsorptionIn80Years" : 1509.59
 } ]

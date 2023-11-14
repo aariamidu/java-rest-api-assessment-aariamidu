@@ -215,4 +215,34 @@ Feel free to experiment with different sorting criteria to analyse emissions dat
 - If using a car, specify the `carType` as described in the API documentation.
 - Tree data provided is representative and serves as a visual aid to understand CO2 sequestration efforts.
 
+## Additional Method: Using the Emissions Calculator with UI Frontend
+
+In addition to using ThunderClient or similar API testing tools, you can interact with the Emissions Calculator using a live server equipped with a user interface (UI) frontend. This approach provides a more user-friendly experience, allowing you to input journey details through a graphical interface.
+
+### Live Server and UI Frontend
+
+To utilize the Emissions Calculator with a UI frontend:
+
+1. **Access the Live Server:**
+
+   - Ensure that the Emissions Calculator API is running locally. Follow the installation and running instructions provided in the [Getting Started](#getting-started) section.
+   - Navigate to the UI frontend hosted on a live server.
+
+2. **UI Frontend Features:**
+
+   - The UI provides a form where you can input journey details, including origin, destination, travel mode, car type, and journey type.
+   - Select options from dropdowns, input text fields, and checkboxes based on your journey details.
+
+3. **Calculate Emissions:**
+
+   - Click the "Calculate" button on the UI to trigger a `POST` request to the `/api/journeys` endpoint, sending the provided journey parameters to the API.
+   - The API will process the request and return the calculated emissions data.
+
+4. **View Results:**
+   - The UI frontend will display the results, including emissions data and information about a representative tree that can sequester the emitted CO2.
+
+### Note:
+
+- The UI frontend acts as a convenient way to interact with the Emissions Calculator API, making it accessible to users who prefer a graphical interface.
+
 Feel free to reach out if you have any questions or issues using the API. Happy calculating! 🌱🌍
