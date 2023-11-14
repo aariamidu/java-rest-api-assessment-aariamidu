@@ -116,7 +116,6 @@ public class EmissionsController {
         if (emissionsDataList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-
         // Retrieves the last item in the list
         EmissionsData lastJourney = emissionsDataList.get(emissionsDataList.size() - 1);
 
