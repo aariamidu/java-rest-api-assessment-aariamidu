@@ -358,4 +358,16 @@
   "treeSpecies" : "Oak",
   "co2StoragePerYear" : 18.87,
   "co2AbsorptionIn80Years" : 1509.59
+}, {
+  "id" : 31,
+  "origin" : "Stevenage, UK",
+  "destination" : "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU",
+  "travelMode" : "car",
+  "carType" : "diesel",
+  "journeyType" : "one way",
+  "co2e" : 29.87,
+  "distance" : 141.4,
+  "treeSpecies" : "Maple",
+  "co2StoragePerYear" : 22.1,
+  "co2AbsorptionIn80Years" : 1768.18
 } ]
