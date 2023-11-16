@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Service class for managing destination addresses.
+ */
 @Service
 public class DestinationAddressService {
 
@@ -17,11 +20,13 @@ public class DestinationAddressService {
     private final ObjectMapper objectMapper;
     private final JsonFileWriter jsonFileWriter;
 
+    // Constructor with dependency injection
     public DestinationAddressService(JsonFileWriter jsonFileWriter) {
         this.objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         this.jsonFileWriter = jsonFileWriter;
     }
 
+    // Get a list of all destination addresses
     public List<DestinationAddress> getDestinationAddresses() {
         try {
             DestinationAddress[] addressesArray = objectMapper.readValue(new File(DESTINATION_FILE_PATH),
@@ -33,6 +38,7 @@ public class DestinationAddressService {
         }
     }
 
+    // Get a specific destination address by ID
     public DestinationAddress getDestinationAddress(int destinationId) {
         List<DestinationAddress> addresses = getDestinationAddresses();
         for (DestinationAddress address : addresses) {
@@ -43,6 +49,7 @@ public class DestinationAddressService {
         return null; // If address with the given ID not found
     }
 
+    // Add a new destination address
     public void addDestinationAddress(DestinationAddress newAddress) {
         List<DestinationAddress> addresses = getDestinationAddresses();
         int maxId = addresses.stream().mapToInt(DestinationAddress::getId).max().orElse(0);
@@ -56,6 +63,7 @@ public class DestinationAddressService {
         }
     }
 
+    // Update an existing destination address
     public DestinationAddress updateDestinationAddress(int id, DestinationAddress updatedAddress) {
         List<DestinationAddress> addresses = getDestinationAddresses();
         for (DestinationAddress address : addresses) {
@@ -71,6 +79,7 @@ public class DestinationAddressService {
         return null; // If address with the given ID not found
     }
 
+    // Delete a destination address by ID
     public boolean deleteDestinationAddress(int destinationId) {
         List<DestinationAddress> addresses = getDestinationAddresses();
         for (DestinationAddress address : addresses) {
@@ -83,6 +92,7 @@ public class DestinationAddressService {
         return false; // If address with the given ID not found
     }
 
+    // Save a list of destination addresses to the JSON file
     public void saveDestinationAddresses(List<DestinationAddress> addresses) {
         try {
             objectMapper.writeValue(new File(DESTINATION_FILE_PATH), addresses);

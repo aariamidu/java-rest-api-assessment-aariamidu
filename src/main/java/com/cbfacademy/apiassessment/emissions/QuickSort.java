@@ -3,6 +3,9 @@ package com.cbfacademy.apiassessment.emissions;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
+/**
+ * Component for performing quicksort on a list of EmissionsData.
+ */
 @Component
 public class QuickSort {
 

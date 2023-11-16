@@ -7,6 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Represents emissions data associated with a journey.
+ * Extends AbstractJourney to inherit basic journey information.
+ */
 public class EmissionsData extends AbstractJourney {
     private long id;
     private double co2e;
@@ -32,6 +36,8 @@ public class EmissionsData extends AbstractJourney {
             @JsonProperty("treeSpecies") String treeSpecies,
             @JsonProperty("co2StoragePerYear") double co2StoragePerYear,
             @JsonProperty("co2AbsorptionIn80Years") double co2AbsorptionIn80Years) {
+
+        // Constructor for EmissionsData class.
         super(origin, journeyType, travelMode, carType);
         this.id = id;
         this.co2e = co2e;
@@ -96,6 +102,7 @@ public class EmissionsData extends AbstractJourney {
         this.co2AbsorptionIn80Years = co2AbsorptionIn80Years;
     }
 
+    // Converts object to JSON string
     public String toJsonString() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -106,6 +113,7 @@ public class EmissionsData extends AbstractJourney {
         }
     }
 
+    // Customised toString method
     public String toString() {
         return "EmissionsData{" +
                 "id=" + id +

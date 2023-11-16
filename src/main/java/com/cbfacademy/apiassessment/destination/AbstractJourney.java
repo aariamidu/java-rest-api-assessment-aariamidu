@@ -1,11 +1,16 @@
 package com.cbfacademy.apiassessment.destination;
 
+/**
+ * Abstract class representing a journey with basic information such as origin,
+ * journey type, travel mode, and car type.
+ */
 public abstract class AbstractJourney {
     protected String origin;
     private String journeyType;
     private String travelMode;
     private String carType;
 
+    // Constructor for AbstractJourney class.
     public AbstractJourney(String origin, String journeyType, String travelMode, String carType) {
         this.origin = origin;
         this.journeyType = journeyType;
@@ -13,6 +18,7 @@ public abstract class AbstractJourney {
         this.carType = carType;
     }
 
+    // Getters and setters
     public String getOrigin() {
         return origin;
     }
@@ -46,6 +52,13 @@ public abstract class AbstractJourney {
         this.carType = carType;
     }
 
+    /**
+     * Gets the journey type as an integer.
+     * 1 represents "one way," 2 represents "return" (default is assumed to be "one
+     * way").
+     *
+     * @return The integer representation of the journey type.
+     */
     public int getJourneyTypeAsInt() {
         if (journeyType == null) {
             return 1; // Assuming default is 'one way'

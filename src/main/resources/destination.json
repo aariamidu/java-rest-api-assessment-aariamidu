@@ -1,37 +1,29 @@
-[
-  {
-    "id": 1,
-    "name": "Fujitsu Office Manchester",
-    "address": "One Central Park, Northampton Rd, Manchester M40 5BP"
-  },
-  {
-    "id": 2,
-    "name": "Fujitsu Office Berkshire",
-    "address": "Lovelace Road, Bracknell, RG12 8SN, United Kingdom"
-  },
-  {
-    "id": 3,
-    "name": "Fujitsu Office Birmingham",
-    "address": "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU"
-  },
-  {
-    "id": 4,
-    "name": "Fujitsu Office London",
-    "address": "7th Floor, The Lantern, 75 Hampstead Rd, London NW1 2PL"
-  },
-  {
-    "id": 5,
-    "name": "Fujitsu Office Basingstoke",
-    "address": "55 Jays Cl, Basingstoke RG22 4BS"
-  },
-  {
-    "id": 6,
-    "name": "Fujitsu Office Chippenham",
-    "address": "Langley Gate, Swindon Rd, Kington Langley, Chippenham SN15 5SE"
-  },
-  {
-    "id": 7,
-    "name": "Fujitsu Office Stevenage",
-    "address": "14 Cavendish Rd, Stevenage SG1 2DY"
-  }
-]
+[ {
+  "id" : 1,
+  "name" : "Fujitsu Office Manchester",
+  "address" : "One Central Park, Northampton Rd, Manchester M40 5BP"
+}, {
+  "id" : 2,
+  "name" : "Fujitsu Office Berkshire",
+  "address" : "Lovelace Road, Bracknell, RG12 8SN, United Kingdom"
+}, {
+  "id" : 3,
+  "name" : "Fujitsu Office Birmingham",
+  "address" : "Solihull Parkway, Birmingham Business Park, Birmingham, B37 7YU"
+}, {
+  "id" : 4,
+  "name" : "Fujitsu Office London",
+  "address" : "7th Floor, The Lantern, 75 Hampstead Rd, London NW1 2PL"
+}, {
+  "id" : 5,
+  "name" : "Fujitsu Office Basingstoke",
+  "address" : "55 Jays Cl, Basingstoke RG22 4BS"
+}, {
+  "id" : 6,
+  "name" : "Fujitsu Office Chippenham",
+  "address" : "Langley Gate, Swindon Rd, Kington Langley, Chippenham SN15 5SE"
+}, {
+  "id" : 7,
+  "name" : "Fujitsu Office Stevenage",
+  "address" : "14 Cavendish Rd, Stevenage SG1 2DY"
+} ]

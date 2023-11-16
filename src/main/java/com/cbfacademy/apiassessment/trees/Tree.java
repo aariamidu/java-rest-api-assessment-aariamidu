@@ -9,6 +9,7 @@ public class Tree {
     public Tree() {
     }
 
+    // Constructors
     public Tree(Long id, String species, double co2StoragePerTreePerYear, double co2AbsorptionPerTreeIn80Years) {
         this.id = id;
         this.species = species;
@@ -16,6 +17,7 @@ public class Tree {
         this.co2AbsorptionPerTreeIn80Years = co2AbsorptionPerTreeIn80Years;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }

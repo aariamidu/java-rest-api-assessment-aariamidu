@@ -22,6 +22,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Service class for calculating emissions data.
+ */
 @Service
 public class EmissionsCalculatorService {
 
@@ -31,17 +34,22 @@ public class EmissionsCalculatorService {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private List<EmissionsData> emissionsDataList = new ArrayList<>();
     private final TreeService treeService;
+
+    // Services for destination addresses and trees
     private final DestinationAddressService destinationAddressService;
     private final Logger logger = LoggerFactory.getLogger(EmissionsCalculatorService.class);
 
+    // Constructor with dependency injection
     public EmissionsCalculatorService(DestinationAddressService destinationAddressService, TreeService treeService) {
         this.destinationAddressService = destinationAddressService;
         this.treeService = treeService;
     }
 
+    // Calculate emissions data based on provided parameters
     public EmissionsData calculateEmissions(long id, String travelMode, String carType, String origin,
             int destinationId, String journeyType) {
 
+        // Retrieve destination address
         DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(destinationId);
 
         if (destinationAddress == null) {
@@ -59,14 +67,18 @@ public class EmissionsCalculatorService {
             connection.setRequestProperty("Authorization", "Bearer " + apiKey);
             connection.setDoOutput(true);
 
+            // Creates request body
             String destination = destinationAddress.getAddress();
             String requestBody = createRequestBody(travelMode, carType, origin, destination, journeyType);
 
+            // Writes request body to the connection
             try (OutputStream os = connection.getOutputStream()) {
                 byte[] requestBodyBytes = requestBody.getBytes("utf-8");
                 os.write(requestBodyBytes, 0, requestBodyBytes.length);
             }
 
+            // If the API response is successful, process the response and create emissions
+            // data
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 InputStream responseStream = connection.getInputStream();
                 JsonNode responseJson = objectMapper.readTree(responseStream);
@@ -80,11 +92,13 @@ public class EmissionsCalculatorService {
                     distanceKm *= 2;
                 }
 
+                // Retrieves a random tree for additional data
                 Tree randomTree = treeService.getRandomTree();
                 String treeSpecies = randomTree != null ? randomTree.getSpecies() : "Unknown";
                 double co2StoragePerYear = randomTree != null ? randomTree.getCo2StoragePerTreePerYear() : 0;
                 double co2AbsorptionIn80Years = randomTree != null ? randomTree.getCo2AbsorptionPerTreeIn80Years() : 0;
 
+                // Creates and returns emissions data
                 EmissionsData emissionsData = new EmissionsData(id, origin, destinationAddress.getAddress(), travelMode,
                         carType,
                         journeyType, co2e, distanceKm, treeSpecies, co2StoragePerYear, co2AbsorptionIn80Years);
@@ -98,6 +112,7 @@ public class EmissionsCalculatorService {
         return null;
     }
 
+    // Create JSON request body for emissions calculation API
     private String createRequestBody(String travelMode, String carType, String origin, String destination,
             String journeyType) {
 
@@ -125,6 +140,7 @@ public class EmissionsCalculatorService {
         return requestBodyNode.toString();
     }
 
+    // Getter for emissions data list
     public List<EmissionsData> getEmissionsDataList() {
         return emissionsDataList;
     }

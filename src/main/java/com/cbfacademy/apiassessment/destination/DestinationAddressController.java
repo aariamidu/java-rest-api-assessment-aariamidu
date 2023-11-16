@@ -15,23 +15,29 @@ import com.cbfacademy.apiassessment.emissions.JsonFileWriter;
 
 import java.util.List;
 
+/**
+ * REST controller for managing destination addresses.
+ */
 @RestController
 @RequestMapping("/api/destination-addresses")
 public class DestinationAddressController {
 
     private final DestinationAddressService destinationAddressService;
 
+    // Constructor with dependency injection
     public DestinationAddressController(DestinationAddressService destinationAddressService,
             JsonFileWriter jsonFileWriter) {
         this.destinationAddressService = destinationAddressService;
 
     }
 
+    // Get all destination addresses
     @GetMapping
     public List<DestinationAddress> getDestinationAddresses() {
         return destinationAddressService.getDestinationAddresses();
     }
 
+    // Add a new destination address
     @PostMapping
     public ResponseEntity<DestinationAddress> addDestinationAddress(@RequestBody DestinationAddress address) {
         try {
@@ -43,6 +49,7 @@ public class DestinationAddressController {
         }
     }
 
+    // Delete a destination address by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDestinationAddress(@PathVariable int id) {
         boolean deletionResult = destinationAddressService.deleteDestinationAddress(id);
@@ -53,6 +60,7 @@ public class DestinationAddressController {
         }
     }
 
+    // Update a destination address by ID
     @PutMapping("/{id}")
     public ResponseEntity<DestinationAddress> updateDestinationAddress(@PathVariable int id,
             @RequestBody DestinationAddress address) {
@@ -68,11 +76,13 @@ public class DestinationAddressController {
         }
     }
 
+    // Validate if a destination address is valid
     private boolean isValidDestinationAddress(DestinationAddress address) {
         // Checks if the address object is not null
         return address != null;
     }
 
+    // Get a destination address by ID
     @GetMapping("/{id}")
     public ResponseEntity<DestinationAddress> getDestinationAddressById(@PathVariable int id) {
         DestinationAddress destinationAddress = destinationAddressService.getDestinationAddress(id);
@@ -84,6 +94,7 @@ public class DestinationAddressController {
         }
     }
 
+    // Save multiple destination addresses
     public void saveDestinationAddresses(@RequestBody List<DestinationAddress> addresses) {
     }
 }
